@@ -1,8 +1,6 @@
 // What is Node JS?
 // A JS runtime engine based on Chrome's V8 engine to run JS applications outside the browser.
 
-const { method } = require("lodash");
-
 // Why use node.js ?
 // 1. No need to learn any other language to write backend.We can use JS on server-side of web development. Use and share same concepts for frontend and backend.
 // 2. Has a rich variety of libraries and tools for developing a wide domain of applications.
@@ -21,10 +19,12 @@ const { method } = require("lodash");
 // - API with database behind it(preferably No SQL) and
 // - Data streaming applications(Like youtube)
 // - Real-time chat applications
-// - Server-side Web applications.
+// - Server-side Web applications.Applications relying on scalability
+// - IOT applications
 
 // => Not ideal for -
 // - Applications with heavy server-side processing like image processing, video conversion, etc
+// - CRUD applications.
 // - For these cases python and ruby on rails but there are workaround in js also.
 
 // => Some major difference between Browser and Node.JS -
@@ -116,8 +116,8 @@ const { method } = require("lodash");
 // - To install a package and simultaneously save it in package.json file (in case using Node.js), add –save flag. The –save flag is default in npm install command so it is equal to npm install package_name command
 // - npm install <package_name> --save
 // - By –save flag one can control where the packages are to be installed -
-//       a) –save-prod : Using this packages will appear in Dependencies which is also by default.
-//       b) –save-dev : Using this packages will get appear in devDependencies and will only be used in the development mode.
+//       a) -–save-prod or -P: Using this packages will appear in Dependencies which is also by default.
+//       b) -–save-dev or -D: Using this packages will get appear in devDependencies and will only be used in the development mode.
 
 //=> Using Semantic Versioning to manage packages:
 //  - version - 4.7.6 ->
@@ -135,6 +135,21 @@ const { method } = require("lodash");
 // - These are defined under a key called "scripts”
 // - You can use these commands with npm like npm run <script-key>
 // For example:  npm run start -> To execute the command specified in the start script
+
+// -----------------------------------------------------------------------------------------------------------
+// => package-lock.json -
+// 1. package-lock.json is automatically generated for any operations where npm modifies either the node_modules tree, or package.json. It describes the exact tree that was generated, such that subsequent installs are able to generate identical trees, regardless of intermediate dependency updates.
+// 2. This file is intended to be committed into source repositories, and serves various purposes:
+//     - Describe a single representation of a dependency tree such that teammates, deployments, and continuous integration are guaranteed to install exactly the same dependencies.
+//     - Provide a facility for users to "time-travel" to previous states of node_modules without having to commit the directory itself.
+//     - Facilitate greater visibility of tree changes through readable source control diffs.
+//     - Optimize the installation process by allowing npm to skip repeated metadata resolutions for previously-installed packages.
+//     - As of npm v7, lockfiles include enough information to gain a complete picture of the package tree, reducing the need to read package.json files, and allowing for significant performance improvements.
+
+// File Format -
+// name -The name of the package this is a package-lock for. This will match what's in package.json.
+// version - The version of the package this is a package-lock for. This will match what's in package.json.
+// lockfileVersion - An integer version, starting at 1 with the version number of this document whose semantics were used when generating this package-lock.json.
 
 // -----------------------------------------------------------------------------------------------------------
 // => Node.js Modules -
