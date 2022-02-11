@@ -1,6 +1,8 @@
 // What is Node JS?
 // A JS runtime engine based on Chrome's V8 engine to run JS applications outside the browser.
 
+const { method } = require("lodash");
+
 // Why use node.js ?
 // 1. No need to learn any other language to write backend.We can use JS on server-side of web development. Use and share same concepts for frontend and backend.
 // 2. Has a rich variety of libraries and tools for developing a wide domain of applications.
@@ -92,27 +94,27 @@
 //     b) And installs the packages inside a node_modules folder
 
 //=> Installing Package -
-// - To install packages and modules in the project use  - npm install "package_name"
-// - To install a package globally (accessible by all projects in system) - npm install "package_name" -g
+// - To install packages and modules in the project use  - npm install <package_name> or npm i "package_name"
+// - To install a package globally (accessible by all projects in system) - npm install <package_name> -g
 
 //=> Uninstalling Package -
-// - To Uninstall packages and modules in the project use  - npm uninstall "package_name"
-// - To Uninstall a package globally - npm uninstall "package_name" -g
+// - To Uninstall packages and modules in the project use  - npm uninstall <package_name>
+// - To Uninstall a package globally - npm uninstall <package_name> -g
 
 // -----------------------------------------------------------------------------------------------------------
 // => package.json -
 
-// - Stores configuration for your project
+// - It is a manifest file that stores configuration for your project
 // - The packages we install using npm for our project are called dependencies
-// - Two types of dependencies
-
-// - production dependencies -> listed under "dependencies" key; installed in the server when you deploy the project.
-// - development dependencies ->  listed under the "devDependencies" key, only installed on your local system. Installed with a --save-dev flag along with npm install.
+// - Two types of dependencies -
+//     a) production dependencies -> listed under "dependencies" key; installed in the server when you deploy the project.
+//     b) development dependencies ->  listed under the "devDependencies" key, only installed on your local system. Installed with a --save-dev flag along with npm install.
+// - We can create the package.json file either manually or we can use the command npm init -y
 // Example: testing libraries like jest, or helper modules like nodemon. We just need them while developing our software. Not needed for the end-user.
 
-//=> Controlling where the package gets installed:
+// => Controlling where the package gets installed:
 // - To install a package and simultaneously save it in package.json file (in case using Node.js), add –save flag. The –save flag is default in npm install command so it is equal to npm install package_name command
-// - npm install "package_name" --save
+// - npm install <package_name> --save
 // - By –save flag one can control where the packages are to be installed -
 //       a) –save-prod : Using this packages will appear in Dependencies which is also by default.
 //       b) –save-dev : Using this packages will get appear in devDependencies and will only be used in the development mode.
@@ -189,3 +191,114 @@
 // npm install express
 // npm install mongoose
 // npm install -g @angular/cli
+
+// -----------------------------------------------------------------------------------------------------------
+// Activity1 -
+// - Create a file index.js if not already there.
+// - Console log "Server Started" from inside this file
+// - Define a script start inside the package.json which just maps to node index.js
+// - Use the terminal to write npm start
+// - Try to change the log message to "Hello from server" and save
+// - Do you see the changes reflected?
+
+// Activity2 -
+// - Install nodemon as dev dependency- npm install nodemon --save-dev
+// - Specify a dev script in the package.json as nodemon index.js and run the script using npm run dev
+// - Change the  log message and see if the changes are reflected or not?
+
+// -----------------------------------------------------------------------------------------------------------
+// => HTTP built-in Module -
+
+// - With Node.js installation we get a module named http
+// - Used to create the server using Node.js which can receive requests and return a response
+// - To use a server we need two primary things
+//     - host - the address where our server will be accessible (example: localhost)
+//     - port - the port of the machine where the server application is running
+
+// => Creating an HTTP Server:
+// 1. Node.js installation provides us with a native “http” module ->
+// const http = require("http");
+//Note: In node.js environment, we use require to import a module to our file instead of import keyword
+
+// 2. Use the createServer method on the http module to create a server
+// const server =  http.createServer()
+
+// 3. The createServer() method takes in a callback which is executed once the server receives a request from the client.
+// const server = http.createServer(() => {
+//     console.log("Hello from server");
+// });
+
+// 4. Finally we make this server instance “listen” for any requests.
+//     - Specify the PORT number as the first argument (say 8082)
+//     - A success callback as the second argument
+// server.listen(8082, () => {
+//     console.log("Listening...");
+// });
+
+// 5. Run the server with npm run dev or node <filename>
+// 6. Now, Use the <localhost:PORT> as your server endpoint URL to make a GET request from Postman or use the <localhost:PORT> in your browser
+// 7. Then check the logs on your workspace and you shall see the message printed
+
+// Note:
+// 1. Postman/Browser will send the request forever :(
+// 2. We made a request to the server but never got a response back.
+// 3. The reason is we never specified what “response” to send back to the client.
+// 4. The request was received but no response was sent.
+
+// => The Response Object -
+// - In the createServer callback we can pass in two special arguments - req for Request Object, and res from Response Object.
+// - The reason is we never specified what “response” to send back to the client.
+// const server = http.createServer((req, res) => {
+//     console.log("Hello from Server");
+// })
+// - The req object has a special function end() which we can call to mark the end of the response.
+// - This will make sure the request is completed.
+// const server = http.createServer((req, res) => {
+//     console.log("Hello from Server");
+//     res.end();
+// }) //No more timeout
+
+// Note: But we also want to send data to the client!. Ending the response is just not enough
+
+// => Sending Data with Response -
+// 1. To send some information back to the client like a JSON or an HTML string
+//     - we use res.write() function which takes the data to be returned as an argument.
+//     - It is in form of a string
+// 2. We can check the server response in either postman preview section or in browser.
+
+// => Specifying Headers in Response -
+// 1. Here is an object with server information, which we need to send back to the client when a request is made to the backend
+// const serverInfo = {
+//   serverName: "Crio Server",
+//   version: "1.0.0",
+//   currentDate: new Date().toDateString(),
+//   currentTime: new Date().toTimeString(),
+// };
+
+// 2. We need to send this back to the client when the request is received. We can send the response date to client using  the response.write() and it should be in the form String. So, We can use JSON.stringify() method.
+// like- response.write(JSON.stringify(serverInfo));
+
+// 3. We must tell the client what “type of content” are we sending.
+
+// 4. To specify the type of content, we have a function writeHead() where
+//     - We can specify Headers (like “Content-Type”)
+//     - And the status code for the request
+// res.writeHead(200, { "Content-Type": "application/json" });
+// res.write(JSON.stringify(serverInfo)); //Stringify the response
+// res.end();
+
+// => The Request Object -
+// 1. To get information about the request, our callback function has a request object also
+//     - Remember we used to make a fetch request with some configs?
+//     - That whole object could be accessed on the backend with the req object
+// 2. So now to distinguish the response based on what endpoint is being hit, we can use the url property of the request
+//     - req.url - contains the url of the request
+// if (req.url === "/status") {
+//     res.writeHead(200, { "Content-Type": "application/json" }); //Adding Headers
+//     res.write(JSON.stringify(serverInfo));
+//     res.end();
+// } else {
+//     res.writeHead(200, { "Content-Type": "text/html" }); //Adding Headers
+//     res.write(`<h1>Hello from server</h1>`);
+//     res.end();
+// }
