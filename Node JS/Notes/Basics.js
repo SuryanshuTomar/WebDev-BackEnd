@@ -1,13 +1,17 @@
-// What is Node JS?
+// => What is Node JS?
 // A JS runtime engine based on Chrome's V8 engine to run JS applications outside the browser.
 
-// Why use node.js ?
+// => Why use node.js ?
 // 1. No need to learn any other language to write backend.We can use JS on server-side of web development. Use and share same concepts for frontend and backend.
 // 2. Has a rich variety of libraries and tools for developing a wide domain of applications.
 // 3. You can use the knowledge of NodeJS
 //     => To build cross-platform applications with Electron
 //     => Write serverless functions for AWS lambda and microservices
 //     => Or work with advanced frameworks like Next.js (server-side frontend framework) in the future
+
+// => How NodeJS differs from Vanilla JS?
+// - NodeJS runs on a server - noe in a browser(runs on backend and frontend)
+// - The console is in the terminal window for Node JS.
 
 // => Pros of Node jS-
 // - Single-threaded, based on event driven, non-blocking I/O model.
@@ -39,7 +43,9 @@
 
 // ----------------------------------------------------------------------------------------------------------
 //=>  Globals - No Window!!! -
-// Node.js Global Objects are the objects that are available in all modules. Global Objects are built-in objects that are part of the JavaScript and can be used directly in the application without importing any particular module. The Node.js Global Objects are listed below:
+
+// - Node.js has Global Object instead of window object.
+// - Node.js Global Objects are the objects that are available in all modules. Global Objects are built-in objects that are part of the JavaScript and can be used directly in the application without importing any particular module. The Node.js Global Objects are listed below:
 
 // Note:
 // i)   To check all the global variables available in node -> In node terminal, press tab twice.In
