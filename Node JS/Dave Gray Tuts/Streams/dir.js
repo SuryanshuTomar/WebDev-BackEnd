@@ -7,6 +7,13 @@ if (!fs.existsSync("./newDir")) {
 		if (err) throw err;
 		console.log("New Directory Created!!");
 	});
-} else {
-	console.log("Directory not Created");
+}
+
+// Deleting Directory if ./newDir exists already
+if (fs.existsSync("./newDir")) {
+	// Creating new Directory
+	fs.rmdir("./newDir", (err) => {
+		if (err) throw err;
+		console.log("New Directory Deleted!!");
+	});
 }
