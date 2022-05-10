@@ -59,3 +59,16 @@
 // Instead of the code reading top to bottom procedurally, async programs may execute different functions at different times based on the order and speed that earlier functions like http requests or file system reads happen. They are used when you don’t know when some async operation will complete.
 
 // You should avoid “callback hell”, a situation where callbacks are nested within other callbacks several levels deep, making the code difficult to understand, maintain and debug.
+
+// --------------------------------------------------------------------------------------------------------
+// - Using Promises and Async-Await in FS Core Modules -
+
+// - We can also promisify our fs modules functions by importing the fs modules as -
+// const fsPromises = require("fs").promises;
+
+// - or by deconstructing the methods directly from fs/promises
+// const { writeFile, appendFile } = require("fs/promises");
+
+// - By Promisifying these fs module function we can escape the Callback Hell by not using the normal fs module functions
+
+// - Difference between fs normal modules and fs promisified modules is that, All the fs module requires an additional callback function for error handling whereas in fs promises functions, error handling is done using try-catch blocks
