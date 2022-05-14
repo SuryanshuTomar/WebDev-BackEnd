@@ -2,8 +2,13 @@ const express = require("express");
 const app = express();
 const path = require("path");
 
+const { logger } = require("./middleware/logEvents");
+
 const PORT = process.env.PORT || 3500;
 const LOCALHOST = "localhost";
+
+// Custom Middleware logger
+app.use(logger);
 
 // Built-In Middleware to handle urlencoded data
 // In other words, form data: "content-type: application/x-www-form-urlencoded"
@@ -70,6 +75,6 @@ app.get("/*", (req, res) => {
 	res.status(404).sendFile(path.join(__dirname, "views", "404.html"));
 });
 
-app.listen(PORT, LOCALHOST, () => {
+app.listen(PORT, () => {
 	console.log(`Server running at ${LOCALHOST}:${PORT}`);
 });
