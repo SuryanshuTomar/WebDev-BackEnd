@@ -5,6 +5,17 @@ const path = require("path");
 const PORT = process.env.PORT || 3500;
 const LOCALHOST = "localhost";
 
+// Built-In Middleware to handle urlencoded data
+// In other words, form data: "content-type: application/x-www-form-urlencoded"
+// To use middlewares on some or all routes of our application we use .use() method.
+app.use(express.urlencoded({ extended: false }));
+
+// Built-In Middleware for json post data
+app.use(express.json());
+
+// Built-In Middleware to serve static files
+app.use(express.static(path.join(__dirname, "public")));
+
 app.get("^/$|index(.html)?", (req, res) => {
 	// sending text response
 	// res.send("Hello World!!");
