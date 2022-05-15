@@ -1,1 +1,2 @@
 2022-05-15   13:20:06	a1cc7e5d-dd22-4ae7-b160-27e31925dab4	Error: Not Allowed by CORS
+2022-05-15   14:35:53	5bca5e8b-2366-4f45-b4b5-0250605e28f2	RangeError: Invalid status code: { id: 1, firstname: 'Dave', lastname: 'Gray' }
