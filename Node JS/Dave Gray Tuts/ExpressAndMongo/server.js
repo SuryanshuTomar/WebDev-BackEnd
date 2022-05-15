@@ -43,25 +43,11 @@ app.use(express.json());
 
 // Built-In Middleware to serve static files
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/subdir", express.static(path.join(__dirname, "public")));
 
-app.get("^/$|index(.html)?", (req, res) => {
-	// sending text response
-	// res.send("Hello World!!");
-
-	// one way to send a static file as response
-	res.sendFile("./views/index.html", { root: __dirname });
-
-	// Another way to send a static file (Recommended)
-	res.sendFile(path.join(__dirname, "views", "index.html"));
-});
-
-app.get("/new-page(.html)?", (req, res) => {
-	res.sendFile(path.join(__dirname, "views", "new-page.html"));
-});
-
-app.get("/old-page(.html)?", (req, res) => {
-	res.redirect(301, "/new-page.html"); // 302 by default
-});
+// Routes
+app.use("/", require("./routes/root"));
+app.use("/subdir", require("./routes/subdir"));
 
 // Route Handlers
 app.get(
