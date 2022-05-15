@@ -1,0 +1,1 @@
+2022-05-15   13:20:06	a1cc7e5d-dd22-4ae7-b160-27e31925dab4	Error: Not Allowed by CORS

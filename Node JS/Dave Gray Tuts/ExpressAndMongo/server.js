@@ -1,14 +1,37 @@
 const express = require("express");
 const app = express();
 const path = require("path");
+const cors = require("cors");
 
+// Middlewares import
 const { logger } = require("./middleware/logEvents");
+const errorHandler = require("./middleware/errorHandler");
 
 const PORT = process.env.PORT || 3500;
 const LOCALHOST = "localhost";
 
 // Custom Middleware logger
 app.use(logger);
+
+// Third-Party Middleware cors(Cross Origin Resource Sharing)
+// Whitelist links will not be prevented by cors
+const whitelist = [
+	"https://www.yoursite.com",
+	"http://127.0.0.1:5500",
+	"http://localhost:3500",
+];
+const corsOptions = {
+	origin: (origin, callback) => {
+		// If origin is present in the whitelist item then, we will pass null and true in callback which means origin which has requested the callback will passed and returned otherwise not.
+		if (whitelist.indexOf(origin) !== -1 || !origin) {
+			callback(null, true);
+		} else {
+			callback(new Error("Not Allowed by CORS"));
+		}
+	},
+	optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
 
 // Built-In Middleware to handle urlencoded data
 // In other words, form data: "content-type: application/x-www-form-urlencoded"
@@ -74,6 +97,9 @@ app.get("/chain(.html)?", [one, two, three]);
 app.get("/*", (req, res) => {
 	res.status(404).sendFile(path.join(__dirname, "views", "404.html"));
 });
+
+// Error Handler
+app.use(errorHandler);
 
 app.listen(PORT, () => {
 	console.log(`Server running at ${LOCALHOST}:${PORT}`);
