@@ -2,6 +2,7 @@
 
 // = Dev Packages -
 // 1. Nodemon - Dev Server for nodejs -> npm i Nodemon(dev dependency)
+// 2. faker-js - Used to create dummy data for our project - npm install @faker-js/faker --save-dev
 
 // = Prod Packages -
 // 1. Data Functions - npm i data-fns
@@ -9,3 +10,7 @@
 // 3. ShortID - Unique Short ID Generator - npm i shortid
 // 4. cors - For Cross Origin Resource Sharing
 // 5. express - expressJS framework
+
+// = React Packages -
+// 1. React Router - npm install react-router-dom
+// 2. Styles Components - npm install styled-components
