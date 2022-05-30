@@ -23,3 +23,16 @@
 
 // - More on -
 // https://www.freecodecamp.org/news/how-the-web-works-a-primer-for-newcomers-to-web-development-or-anyone-really-b4584e63585c/
+
+// => HTTP Request Structure -
+// - The Client usually send a request using HTTP requests.
+// 1. Method : It defines the type of HTTP methods like get, post, put, delete
+// 2. Path: /path_URL
+// 3. Body: Data sent to the server in case of post and put requests in the form of JSON usually.
+// 4. Headers: These are optional properties that you can specify on a request to send addtional metadata to the servers. (Metdata: data about data, in this case data about servers).
+
+// => HTTP Response Structure -
+// - The Server usually respond to a client request using HTTP response.
+// 1. Headers: Just like HTTP requests, Headers in response are also optional and basically the same as the one in request.
+// 2. Body: Data sent as a response to the client request from the server which is usually in the form of JSON data.
+// 3. Status Code: It tells us and the client whether the request was successfull or not. If it gives an error code that generally tells us what went wrong. 
