@@ -12,7 +12,14 @@
 // - Our Browsers manages the mapping of the site name url of these sites to IP addresses.
 // - Browsers only make these requests to DNS servers the first time we browse to a particular site.
 // - Afterwards, it stores the locations which we call the DNS Cache, which saves us some work and improves performance when we are browsing the web.
-// Syntax : 255.255.255.255:PORTNO
+// - IP Address Syntax : 255.255.255.255:PORTNO
+// - The thing that defines how our web server responds to these requests are APIs.
+// - APIs is the acronym for Application Programming Interface, which is a software intermediary that allows two application to talk to each other.
+// - The APIs tells what kind of functions the server should support and how those functions should be used.
+// - We can implement our APIs in either NodeJS, Python or any other programming language.
+// - But whats important is that those language should react the requests and respond to them using HTTP.
+// - HTTP is the common way that the browser and the server can use to understand what both sides are saying.
+// - To Check HTTP methods - https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
 
 // - More on -
 // https://www.freecodecamp.org/news/how-the-web-works-a-primer-for-newcomers-to-web-development-or-anyone-really-b4584e63585c/
