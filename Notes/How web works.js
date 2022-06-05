@@ -68,3 +68,21 @@
 // 1. This request will FAIL, because requests to get information from a cross-origin domain are not allowed by the browser. The browser is trying to protect your privacy by preventing www.wikipedia.org from stealing your private information from www.bank.com.
 // 2. This request will SUCCEED. This is a little known exception to the Same Origin Policy! The decision to allow POST requests is mostly historical, but there is also a lower chance that a POST request will steal your private information. POST requests are used to write data to a server, rather than GET data from it, so it's less likely the response will contain private information.
 // 3. This request will SUCCEED. The Same Origin Policy applies only to scripts and not static resources like HTML tags.
+
+// - What is CORS ?
+// - CORS stands for Cross Origin Resource Sharing.
+// - Its a way of relaxing the restrictions that the same origin policy puts on us developers so that we can make applications that potentially span many different domains and origins because the same origin policy generally limits us in the browser to talking to just one origin.
+// - The CORS header(Access-Control-Allow-Origin) are used to allow the developers to allow an exception when we know requests from a different domain are safe and expected. And this header is optional.
+// - So, our first option is to not include it and follow the textbook same origin policy.
+// - Our second option is - we can also specify the access-control-allow-origin and include a specific orgin as the value like -> Access-Control-Allow-Origin: https://www.google.com
+// Eg- So say we wanted to allow that request from Google to get the data for Wikipedia.org. The same request that failed for us earlier. Well, to allow that, Wikipedia would need to set a header that includes Google.com in the list of allowed origins and then send that header back when we make that request from JavaScript.
+// - Our third option is -  we can set the Access-Control-Allow-Origin to "*" which means it will allow requests from any origin.
+// - But in production, if you're really trying to lock down your site, it's a good idea to explicitly set access control, allow origin to the list of domains that you know will be making requests to your server.
+
+// -> WhiteListing -
+// - The really great thing about CORS is that it follows this practice of Whitelisting or Allow Listing.
+// - Which is the practice of explicitly allowing access to some particular privilege or service. Like the access to be able to read data from a server. And it's the opposite of blacklisting, where by default you allow access. And you just have a specific list of Privileges that you block Or users that you block.
+// - When you follow blacklisting, it's really easy to miss one of the people or privileges that you want to Block than it is when you deny access by default and only allow access to a pre-approved list of people or services.
+// - When it comes to security, It's always better to white list than it is to blacklist. And that's what the access control allow origin header does.
+// - The origins that you allow in the header are your white list And you're denying all other origins.
+// - Finally, it's worth noting that it's the browser that does all of this enforcement of the same origin, policy and cause as well.
