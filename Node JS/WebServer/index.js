@@ -32,11 +32,20 @@ const server = http.createServer((req, res) => {
 			name: "Nikola Tesla",
 		},
 	];
-	console.log(req.url);
+
 	const params = req.url.split("/");
 	console.log(params);
 	// /friends/2 => ["", "friends", "2"]
-	if (params[1] === "friends") {
+
+	if (req.method === "POST" && params[1] === "friends") {
+		req.on("data", (data) => {
+			const friend = data.toString();
+			console.log("Request: ", friend);
+			friends.push(JSON.parse(friend));
+			// Echoeing data back from request readable stream to response writable stream
+		});
+		req.pipe(res);
+	} else if (req.method === "GET" && params[1] === "friends") {
 		// res.statusCode = 200;
 		// res.setHeader("Content-Type", "application/json");
 		res.writeHead(200, {
@@ -47,16 +56,20 @@ const server = http.createServer((req, res) => {
 				"Content-Type": "application/json",
 			});
 			res.write(JSON.stringify({ status: 404, message: "No Friend found" }));
+			res.end();
 		} else if (params.length === 3) {
 			const friendIndex = Number(params[2]);
 			res.write(JSON.stringify(friends[friendIndex]));
+			res.end();
 		} else {
 			res.write(JSON.stringify(friends));
+			res.end();
 		}
-	} else if (params[1] === "messages") {
+	} else if (req.method === "GET" && params[1] === "messages") {
 		res.write(
 			"<html><body><h3>Hello</h3><h3>What are yours thougts on astronomy</h3></body></html>"
 		);
+		res.end();
 	} else {
 		res.writeHead(404, {
 			"Content-Type": "application/json",
@@ -67,9 +80,8 @@ const server = http.createServer((req, res) => {
 				message: "Something went wrong",
 			})
 		);
+		res.end();
 	}
-
-	res.end();
 });
 
 const PORT = 3500;
