@@ -35,11 +35,10 @@
 // - The Server usually respond to a client request using HTTP response.
 // 1. Headers: Just like HTTP requests, Headers in response are also optional and basically the same as the one in request.
 // 2. Body: Data sent as a response to the client request from the server which is usually in the form of JSON data.
-// 3. Status Code: It tells us and the client whether the request was successfull or not. If it gives an error code that generally tells us what went wrong. 
-
+// 3. Status Code: It tells us and the client whether the request was successfull or not. If it gives an error code that generally tells us what went wrong.
 
 // -------------------------------------------------------------------------------------------
-// => Same Origin Policy - 
+// => Same Origin Policy -
 
 // 1. What is an Origin ?
 // 1. - When we browse the Web and we go to a site like Google Maps, what we type in the browser is something like this - https://www.google.com/maps/.
@@ -51,10 +50,21 @@
 // - We can browse the other pages at that origin, so maybe we replace maps with mail to get our email. But we can't change google.com to facebook.com and still be at the same origin. And similary if we change the protocol or port no then also we will not be at the same origin.
 // - It important to us because our browser and JS use what's called the Same Origin Policy.
 
-// 2. What is Same Origin Policy ? 
+// 2. What is Same Origin Policy ?
 // 2. - Same Origin Policy is a security feature by the browser that restricts what our browser is allowed to load when you're browsing pages on the internet.
-// - Our browser allows all requests from the same origin as the page that we've loaded in our browser. So, we can be on Google.com and make requests to Google.com with the HTTPS protocol. But the browser restricts requests from different origins, then the site we're currently browsing. So, the scenerio where Google gets data about friends from facebook isn't allowed because that helps protect our privacy. For eg- we've types Google.com into our browser and we're browsing Google, the request to Facebook will be denied by the browser because its enforcing that same origin policy. 
+// - Our browser allows all requests from the same origin as the page that we've loaded in our browser. So, we can be on Google.com and make requests to Google.com with the HTTPS protocol. But the browser restricts requests from different origins, then the site we're currently browsing. So, the scenerio where Google gets data about friends from facebook isn't allowed because that helps protect our privacy. For eg- we've types Google.com into our browser and we're browsing Google, the request to Facebook will be denied by the browser because its enforcing that same origin policy.
 // - Now there is an exception, The Cross-Origin Servers, So from Google.com to Facebook.com are often allowed even with the same origin policy. So, we can send any data or request from Google.com to Facebook.com and its upto Facebook.com servers whether they choose to respond to the requests or not.
 // - When we need to talk to many different servers across many different domains, its best to use what's called CORS(Cross Origin Resource Sharing)
 
+// -> Exercise: Same Origin Policy
+// - Let's test our knowledge of the browser's Same Origin Policy! See if you can answer three quick questions about the following scenario:
+// - Say you're browsing a page on www.wikipedia.org. In general, will the following requests succeed, or fail?
+// 1. A JavaScript GET request to www.bank.com.
+// 2. A JavaScript POST request to www.bank.com.
+// 3. Clicking an HTML link to a video on www.bank.com.
 
+// -> Answers -
+// Here we go! There are possible exceptions, but in general the following will be true:
+// 1. This request will FAIL, because requests to get information from a cross-origin domain are not allowed by the browser. The browser is trying to protect your privacy by preventing www.wikipedia.org from stealing your private information from www.bank.com.
+// 2. This request will SUCCEED. This is a little known exception to the Same Origin Policy! The decision to allow POST requests is mostly historical, but there is also a lower chance that a POST request will steal your private information. POST requests are used to write data to a server, rather than GET data from it, so it's less likely the response will contain private information.
+// 3. This request will SUCCEED. The Same Origin Policy applies only to scripts and not static resources like HTML tags.
