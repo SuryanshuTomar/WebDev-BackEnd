@@ -18,8 +18,16 @@ const friends = [
 	},
 ];
 
-// Routes
-// app.get(pathEndpoint, HandlerFunction(request, response, next))
+// Middlewares -
+app.use((req, res, next) => {
+	const start = Date.now();
+	next();
+	const delta = Date.now() - start;
+	console.log(`${req.method} : ${req.url}  ${delta}ms`);
+});
+
+// Routes -
+// app.get(pathEndpoint, HandlerFunction(request, response))
 app.get("/friends", (req, res) => {
 	res.json(friends);
 });
