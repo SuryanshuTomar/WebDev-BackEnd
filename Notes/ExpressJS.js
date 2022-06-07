@@ -58,3 +58,23 @@ const { request } = require("https");
 // - More On -
 // https://www.freecodecamp.org/news/the-model-view-controller-pattern-mvc-architecture-and-frameworks-explained/
 // https://www.codecademy.com/article/mvc
+
+
+// => Express Routers -
+
+// - Express Router is a built-in class that refers to how an application’s endpoints (URIs) respond to client requests. In addition, the express router class helps create route handlers.
+// - You define routing using the Express app object methods that correspond to HTTP methods; for example, app.get() to handle GET requests and app.post to handle POST requests. For a full list, see the app.METHOD.
+// - You can also use the app.all() to handle all HTTP methods and app.use() to specify middleware as the callback function (See Using middleware for details).
+// - These routing methods specify the callback function (sometimes called “handler functions”) called when the application receives a request to the specified route (endpoint) and HTTP method.
+// - In other words, the application “listens” for requests that match the specified route(s) and method(s), and when it detects a match, it calls the specified callback function.
+// - The routing methods can have more than one callback function as arguments.
+// - With multiple callback functions, it is important to provide next as an argument to the callback function and then call next() within the function’s body to hand off control to the next callback.
+
+// - Example - 
+// const express = require('express')
+// const app = express()
+
+// respond with "hello world" when a GET request is made to the homepage
+// app.get('/', function (req, res) {
+//   res.send('hello world')
+// })
