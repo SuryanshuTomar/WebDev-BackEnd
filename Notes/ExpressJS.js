@@ -43,3 +43,18 @@ const { request } = require("https");
 //       MIDDLEWARE (Endpoint)
 //       app.HTTPMethod()
 //       req + res
+
+// ------------------------------------------------------------------------------------------------
+// => Model View Controller (MVC Pattern) -
+
+// - MVC stands for model-view-controller. Here's what each of those components mean:
+// 1. Model: The backend that contains all the data logic
+// 2. View: The frontend or graphical user interface (GUI)
+// 3. Controller: The brains of the application that controls how data is displayed
+
+// - MVC is short for Model, View, and Controller. MVC is a popular way of organizing your code. The big idea behind MVC is that each section of your code has a purpose, and those purposes are different. Some of your code holds the data of your app, some of your code makes your app look nice, and some of your code controls how your app functions.
+// - MVC is a way to organize your code’s core functions into their own, neatly organized boxes. This makes thinking about your app, revisiting your app, and sharing your app with others much easier and cleaner.
+
+// - More On -
+// https://www.freecodecamp.org/news/the-model-view-controller-pattern-mvc-architecture-and-frameworks-explained/
+// https://www.codecademy.com/article/mvc
