@@ -1,13 +1,7 @@
 const express = require("express");
-const {
-	getMessages,
-	postMessage,
-} = require("./controllers/messages.controller");
-const {
-	getFriends,
-	getOneFriend,
-	postFriend,
-} = require("./controllers/friends.controller");
+
+const friendsRouter = require("./routes/friends.routes");
+const messagesRouter = require("./routes/messages.routes");
 
 // We set up our application server using the express function that's exported from the express package.
 const app = express();
@@ -20,23 +14,15 @@ app.use((req, res, next) => {
 	const start = Date.now();
 	next();
 	const delta = Date.now() - start;
-	console.log(`${req.method} : ${req.url}  ${delta}ms`);
+	console.log(`${req.method} : ${req.baseUrl}${req.url}  ${delta}ms`);
 });
 
 // For Parsing JSON Body
 app.use(express.json());
 
-// Routes -
-// app.get(pathEndpoint, HandlerFunction(request, response))
-// Friends Routes
-app.get("/friends", getFriends);
-// Nested Route
-app.get("/friends/:id", getOneFriend);
-app.post("/friends", postFriend);
-
-// Messages Routes
-app.get("/messages", getMessages);
-app.post("/messages", postMessage);
+// Mouting Router middleware friendsRouter and messagesRouter to the express app
+app.use("/friends", friendsRouter);
+app.use("/messages", messagesRouter);
 
 // Listening to the application server
 app.listen(PORT, "localhost", () => {

@@ -1,6 +1,6 @@
 // => WHAT IS EXPRESS JS ?
 
-const { request } = require("https");
+// const { request } = require("https");
 
 // - Express is a node js web application framework that provides broad features for building web and mobile applications. It is used to build a single page, multipage, and hybrid web application.
 // - It's a layer built on the top of the Node js that helps manage servers and routes.
@@ -8,6 +8,7 @@ const { request } = require("https");
 // - More On -
 // https://www.simplilearn.com/tutorials/nodejs-tutorial/what-is-express-js?source=sl_frs_nav_playlist_video_clicked
 
+// ----------------------------------------------------------------------------------------------
 // => What are Middlewares ?
 // -  Middleware functions are functions that have access to the request object ( req ), the response object ( res ), and the next function in the application's request-response cycle. The next function is a function in the Express router which, when invoked, executes the middleware succeeding the current middleware.
 
@@ -44,7 +45,7 @@ const { request } = require("https");
 //       app.HTTPMethod()
 //       req + res
 
-// ------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------
 // => Model View Controller (MVC Pattern) -
 
 // - MVC stands for model-view-controller. Here's what each of those components mean:
@@ -59,7 +60,7 @@ const { request } = require("https");
 // https://www.freecodecamp.org/news/the-model-view-controller-pattern-mvc-architecture-and-frameworks-explained/
 // https://www.codecademy.com/article/mvc
 
-
+// -------------------------------------------------------------------------------------------
 // => Express Routers -
 
 // - Express Router is a built-in class that refers to how an application’s endpoints (URIs) respond to client requests. In addition, the express router class helps create route handlers.
@@ -70,7 +71,7 @@ const { request } = require("https");
 // - The routing methods can have more than one callback function as arguments.
 // - With multiple callback functions, it is important to provide next as an argument to the callback function and then call next() within the function’s body to hand off control to the next callback.
 
-// Syntax - 
+// Syntax -
 // Defining the Router
 // const router = express.Router();
 
