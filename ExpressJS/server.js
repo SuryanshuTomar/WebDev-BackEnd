@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 
 const friendsRouter = require("./routes/friends.routes");
 const messagesRouter = require("./routes/messages.routes");
@@ -16,6 +17,9 @@ app.use((req, res, next) => {
 	const delta = Date.now() - start;
 	console.log(`${req.method} : ${req.baseUrl}${req.url}  ${delta}ms`);
 });
+
+// Serving Static Files in ExpressJS
+app.use("/site", express.static(path.join(__dirname, "public")));
 
 // For Parsing JSON Body
 app.use(express.json());
