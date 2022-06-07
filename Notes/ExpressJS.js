@@ -70,11 +70,32 @@ const { request } = require("https");
 // - The routing methods can have more than one callback function as arguments.
 // - With multiple callback functions, it is important to provide next as an argument to the callback function and then call next() within the function’s body to hand off control to the next callback.
 
-// - Example - 
-// const express = require('express')
-// const app = express()
+// Syntax - 
+// Defining the Router
+// const router = express.Router();
 
-// respond with "hello world" when a GET request is made to the homepage
-// app.get('/', function (req, res) {
-//   res.send('hello world')
-// })
+// Add the path the router
+// router.HTTPMethod("/apiPath", routeHandler)
+
+// Using the router as middleware or mounting the router on the express app
+// app.use(router);
+// Or we can mounting group of routes under a specific path
+// app.use("/apiPath", router)
+
+// - Example -
+// server.js
+// const express = require("express");
+// const app = express();
+// const PORT = process.env.PORT = 3000;
+
+// let router = express.Router();
+
+// router.get('/',function(req,res){
+//   res.json({'message' : 'Ping Successfull'});
+// });
+
+// app.use('/api',router);
+
+// app.listen(PORT,function(){
+//   console.log('Server is running at PORT:',PORT);
+// });
