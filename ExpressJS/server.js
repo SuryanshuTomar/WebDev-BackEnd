@@ -7,6 +7,10 @@ const messagesRouter = require("./routes/messages.routes");
 // We set up our application server using the express function that's exported from the express package.
 const app = express();
 
+// Setting View Engine
+app.set("view engine", "hbs");
+app.set("views", path.join(__dirname, "views"));
+
 // PORT
 const PORT = 3500;
 
@@ -23,6 +27,13 @@ app.use("/site", express.static(path.join(__dirname, "public")));
 
 // For Parsing JSON Body
 app.use(express.json());
+
+app.get("/", (req, res) => {
+	res.render("index", {
+		title: "My Friends",
+		caption: "Life is a box full of chocolates...",
+	});
+});
 
 // Mouting Router middleware friendsRouter and messagesRouter to the express app
 app.use("/friends", friendsRouter);
