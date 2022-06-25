@@ -8,6 +8,39 @@
 // - More On -
 // https://www.simplilearn.com/tutorials/nodejs-tutorial/what-is-express-js?source=sl_frs_nav_playlist_video_clicked
 
+// --------------------------------------------------------------------------------------------------
+// => Setting Express Servers -
+
+// ---------------------------------------------
+// Method I. Conventional Way of creating an Express Server -
+// const express = require("express");
+// const app = express();
+// app.listen(PORT, "localhost", () => {
+// 	console.log(`Listening on Port : ${PORT}...`);
+// });
+
+// ---------------------------------------------
+// Method II. Another common way of creating an Express Server which is more flexible than coventional way -
+
+// Step 1. Creating an Express server via http server -
+// const http = require("http");
+// const express = require("express");
+// const app = express();
+
+// Step 2. Passing the express server app to our http server -
+// const server = http.createServer(app);
+
+// Note: Any middleware and route handlers that we attach to this express app object will respond to the requests coming in to our server object.
+// The added benifit of this method is that we can organize our code little bit more by seprating the server functionality that we have in server.js from our express code, which we are going to put into a new file called app.js
+
+// Step 3. Setting PORT -
+// const PORT = process.env.PORT || 3500;
+
+// Step 4. Listening to the server -
+// server.listen(PORT, "localhost", () => {
+// 	console.log(`Listening on PORT ${PORT}...`);
+// });
+
 // ----------------------------------------------------------------------------------------------
 // => What are Middlewares ?
 // -  Middleware functions are functions that have access to the request object ( req ), the response object ( res ), and the next function in the application's request-response cycle. The next function is a function in the Express router which, when invoked, executes the middleware succeeding the current middleware.
