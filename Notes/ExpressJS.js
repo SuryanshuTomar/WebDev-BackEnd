@@ -30,8 +30,10 @@
 // Step 2. Passing the express server app to our http server -
 // const server = http.createServer(app);
 
-// Note: Any middleware and route handlers that we attach to this express app object will respond to the requests coming in to our server object.
-// The added benifit of this method is that we can organize our code little bit more by seprating the server functionality that we have in server.js from our express code, which we are going to put into a new file called app.js
+// Note:
+// 1. Any middleware and route handlers that we attach to this express app object will respond to the requests coming in to our server object.
+// 2. The added benefit of this method is that we can organize our code little bit more by seprating the server functionality that we have in server.js from our express code, which we are going to put into a new file called app.js.
+// 3. Another benefit of this method is that not only we can listen to http requests but also to other types of connections like web sockets for real time connections.
 
 // Step 3. Setting PORT -
 // const PORT = process.env.PORT || 3500;
