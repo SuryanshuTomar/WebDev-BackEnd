@@ -1,5 +1,6 @@
 // Imports
 const path = require("path");
+const morgan = require("morgan");
 const express = require("express");
 const cors = require("cors");
 
@@ -21,6 +22,9 @@ app.use(
 		origin: "http://localhost:3000",
 	})
 );
+
+// Logging Middleware
+app.use(morgan("combined"));
 
 // Routers Middlewares
 app.use(planetsRouter);
