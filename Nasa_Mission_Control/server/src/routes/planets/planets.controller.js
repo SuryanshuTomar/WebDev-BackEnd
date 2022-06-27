@@ -1,5 +1,6 @@
 // Imports
-const planets = require("../../models/planets.model");
+
+const { planets } = require("../../models/planets.model");
 
 // Router Handlers / Controller Functions
 function getAllPlanets(req, res) {
