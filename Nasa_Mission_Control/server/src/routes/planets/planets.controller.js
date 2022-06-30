@@ -1,5 +1,4 @@
 // Imports
-
 const { planets } = require("../../models/planets.model");
 
 // Router Handlers / Controller Functions
