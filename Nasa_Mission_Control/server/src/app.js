@@ -6,6 +6,7 @@ const cors = require("cors");
 
 // Router Imports
 const planetsRouter = require("./routes/planets/planets.router");
+const launchesRouter = require("./routes/launches/launches.router");
 
 // Creating express server app
 const app = express();
@@ -28,6 +29,8 @@ app.use(morgan("combined"));
 
 // Routers Middlewares
 app.use(planetsRouter);
+app.use(launchesRouter);
+
 app.get("/", (req, res) => {
 	res.sendFile(path.join(__dirname, "..", "public", "index.html"));
 });
