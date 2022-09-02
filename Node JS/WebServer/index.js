@@ -3,7 +3,7 @@ const http = require("http");
 const server = http.createServer((req, res) => {
 	// Responding with Plain text
 	// res.writeHead(200, {
-	// 	"Content-Type": "text/plain",
+	// 	"Content-Type": "text/plain"
 	// });
 	// res.write("Request Completed");
 
