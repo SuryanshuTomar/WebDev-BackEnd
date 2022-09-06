@@ -5,9 +5,9 @@ const app = express();
 // Setup static middleware
 app.use(express.static("./public"));
 
-app.get("/", (req, res) => {
-	res.status(200).sendFile(path.resolve(__dirname, "./navbar/index.html"));
-});
+// app.get("/", (req, res) => {
+// 	res.status(200).sendFile(path.resolve(__dirname, "./navbar/index.html"));
+// });
 
 app.get("/about", (req, res) => {
 	res.status(200).send("<h1>About Page</h1>");
