@@ -1,3 +1,6 @@
+// import initializeApp function from firebase/app to initailize our firebase app instanceof.
+import { initializeApp } from "firebase/app";
+
 // Firebase config settings of our app from the firebase console.
 const firebaseConfig = {
 	apiKey: "AIzaSyDerrz9KTo65qL5uDGDzVcDrkawNggMerw",
@@ -7,3 +10,5 @@ const firebaseConfig = {
 	messagingSenderId: "186833937148",
 	appId: "1:186833937148:web:45e65fa9052264b41fed79",
 };
+
+initializeApp(firebaseConfig);
