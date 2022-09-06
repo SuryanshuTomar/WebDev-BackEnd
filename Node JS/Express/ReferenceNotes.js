@@ -17,6 +17,7 @@
 // app.use()
 // app.listen()
 
+
 // => Setup static middleware -
 // Using app.use() middle and static method from express to server the public folder which contains all static files of our server app. (Static files are the files which we dont need to be change by our server app)
 // app.use(express.static("./public"));
