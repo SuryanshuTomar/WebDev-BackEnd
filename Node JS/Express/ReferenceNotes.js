@@ -46,3 +46,78 @@
 // app.listen(PORT, URL, () => {
 // 	console.log("Listening on PORT : ", PORT);
 // });
+
+// => There are two types of API parameters :
+// 1. Router Parameters -
+// Using Route Parameter
+// here /:prodId is placeholder
+// const { products } = require("./data/data");
+// app.get("/api/products/:prodId", (req, res) => {
+// 	const productId = +req.params.prodId;
+// 	const singleProd = products.find((prod) => prod.id === productId);
+// 	if (!singleProd) {
+// 		return res.status(404).json({
+// 			message: "Product does not exists",
+// 		});
+// 	}
+// 	res.status(200).json(singleProd);
+// });
+
+// 2. Query String parameters or URL parameters -
+// Using Query String Parameter
+// app.get("/api/v1/query", (req, res) => {
+// 	const { search, limit } = req.query;
+// 	let sortedProducts = [...products];
+
+// 	if (search) {
+// 		sortedProducts = sortedProducts.filter((prod) =>
+// 			prod.name.startsWith(search)
+// 		);
+// 	}
+// 	if (limit) {
+// 		sortedProducts = sortedProducts.slice(0, Number(limit));
+// 	}
+
+// 	if (sortedProducts.length === 0) {
+// 		res.status(200).json({
+// 			success: true,
+// 			message: "No Products matched your search query",
+// 			data: [],
+// 		});
+// 	} else {
+// 		res.status(200).json(sortedProducts);
+// 	}
+// });
+
+// ----------------------------------------------------------------------------------------------------
+// Example - 1
+
+// const express = require("express");
+// const path = require("path");
+// const app = express();
+
+// // Setup static middleware
+// app.use(express.static("./public"));
+
+// // app.get("/", (req, res) => {
+// // 	res.status(200).sendFile(path.resolve(__dirname, "./navbar/index.html"));
+// // });
+
+// app.get("/about", (req, res) => {
+// 	res.status(200).send("<h1>About Page</h1>");
+// });
+
+// // for handling all other routes that are not defined by our server application
+// app.all("*", (req, res) => {
+// 	res.status(404).send("<h1>404 | Resource Not Found !!</h1>");
+// });
+
+// // => Listening to port
+// const PORT = 3500;
+// const URL = "localhost";
+// app.listen(PORT, URL, () => {
+// 	console.log("Listening on PORT : ", PORT);
+// });
+
+// ----------------------------------------------------------------------------------------------------
+// Example - 2
