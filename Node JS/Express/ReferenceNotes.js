@@ -52,6 +52,10 @@
 // app.use(logger);
 // - using multiple middlewares
 // app.use([logger, authorize]);
+// - Option from to use middlewares from -
+//    1. Our own middlewares
+//    2. Expres middlewares
+//    3. Third party middlewares
 
 // => There are two types of API parameters :
 // 1. Router Parameters -
