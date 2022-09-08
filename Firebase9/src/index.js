@@ -4,6 +4,7 @@ import {
 	getFirestore,
 	collection,
 	getDocs,
+	onSnapshot,
 	addDoc,
 	updateDoc,
 	doc,
@@ -30,16 +31,27 @@ const db = getFirestore();
 const colRef = collection(db, "books"); // collection(FirebaseInstance(database), collectionName)
 
 // -> Get collection Data
-// getDocs(collectionReferece) => It will return a promise
-getDocs(colRef)
-	.then((snapshot) => {
-		let books = [];
-		snapshot.docs.forEach((doc) => {
-			books.push({ ...doc.data(), id: doc.id });
-		});
-		console.log(books);
-	})
-	.catch((error) => console.error(error));
+// getDocs(collectionReference) => It will return a promise
+// getDocs(colRef)
+// 	.then((snapshot) => {
+// 		let books = [];
+// 		snapshot.docs.forEach((doc) => {
+// 			books.push({ ...doc.data(), id: doc.id });
+// 		});
+// 		console.log(books);
+// 	})
+// 	.catch((error) => console.error(error));
+
+// -> Real Time collection Data
+// This will get us the latest snapshot of the collection every time there is a change in the collection.
+// onSnapshot(collectionReference, callBackfunction) => The callbackFunction will run every time there is change in the collection and it will return the latest snapshot of the collection
+onSnapshot(colRef, (snapshot) => {
+	let books = [];
+	snapshot.docs.forEach((doc) => {
+		books.push({ ...doc.data(), id: doc.id });
+	});
+	console.log(books);
+});
 
 // -> Adding documents
 // addDoc(collectionReference, DataObject);
