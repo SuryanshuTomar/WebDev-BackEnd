@@ -42,14 +42,68 @@ app.get("/api/people", (req, res) => {
 app.post("/api/people", (req, res) => {
 	console.log(req.body);
 	const { name } = req.body;
-	if (name !== "") {
+	if (name) {
 		res.status(201).json({
 			success: true,
-			data: people,
+			person: name,
 		});
 	} else {
-		res.status(401).send("Authorization Failed !!");
+		res.status(400).json({
+			success: false,
+			msg: "Name Field can not be empty !",
+		});
 	}
+});
+
+app.put("/api/people/:id", (req, res) => {
+	const { name } = req.body;
+	let { id } = req.params;
+	id = +id;
+
+	if (people.length - 1 < id) {
+		return res.status(400).json({
+			success: false,
+			msg: `ID:${id} does not exists`,
+		});
+	}
+
+	if (!name) {
+		return res.status(400).json({
+			success: false,
+			msg: "'name' property not found !",
+		});
+	}
+
+	const newPeople = people.map((person) => {
+		if (person.id === id) {
+			return { id: id, name: name };
+		} else {
+			return person;
+		}
+	});
+	res.status(200).json({
+		success: true,
+		person: newPeople,
+	});
+});
+
+app.delete("/api/people/:id", (req, res) => {
+	const { name } = req.body;
+	let { id } = req.params;
+	id = +id;
+
+	if (people.length < id) {
+		return res.status(400).json({
+			success: false,
+			msg: `ID:${id} does not exists`,
+		});
+	}
+
+	const newPeople = people.filter((person) => person.id !== id);
+	res.status(200).json({
+		success: true,
+		person: newPeople,
+	});
 });
 
 // Handling post request for the form that is in method-public folder
