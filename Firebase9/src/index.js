@@ -9,6 +9,10 @@ import {
 	updateDoc,
 	doc,
 	deleteDoc,
+	query,
+	where,
+	orderBy,
+	serverTimestamp,
 } from "firebase/firestore";
 
 // -> Firebase config settings of our app from the firebase console.
@@ -45,7 +49,27 @@ const colRef = collection(db, "books"); // collection(FirebaseInstance(database)
 // -> Real Time collection Data
 // This will get us the latest snapshot of the collection every time there is a change in the collection.
 // onSnapshot(collectionReference, callBackfunction) => The callbackFunction will run every time there is change in the collection and it will return the latest snapshot of the collection
-onSnapshot(colRef, (snapshot) => {
+// onSnapshot(colRef, (snapshot) => {
+// 	let books = [];
+// 	snapshot.docs.forEach((doc) => {
+// 		books.push({ ...doc.data(), id: doc.id });
+// 	});
+// 	console.log(books);
+// });
+
+// -> Firestore Queries And OrderBy-
+// This will get us only the documents which satifies the where condition in the query.
+// query(CollectionReference,
+// 		where("FieldName", "Comparator", "SearchValue"),
+// 		orderBy("FieldName", "asc/desc"));
+// For orderBy, first we need to create the composite Index in the indexes tab in the firebase firestore of our app in the console.
+// const bookQueryRef = query(
+// 	colRef,
+// 	where("author", "==", "Jane"),
+// 	orderBy("title", "desc") // by default it will be ascending
+// );
+const bookQueryRef = query(colRef, orderBy("createdAt"));
+onSnapshot(bookQueryRef, (snapshot) => {
 	let books = [];
 	snapshot.docs.forEach((doc) => {
 		books.push({ ...doc.data(), id: doc.id });
@@ -62,6 +86,7 @@ addBookForm.addEventListener("submit", (event) => {
 	addDoc(colRef, {
 		title: addBookForm.title.value,
 		author: addBookForm.author.value,
+		createdAt: serverTimestamp(),
 	})
 		.then(() => addBookForm.reset())
 		.catch((err) => console.log(err));
