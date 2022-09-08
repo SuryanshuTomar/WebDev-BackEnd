@@ -40,6 +40,12 @@
 // 	res.status(404).send("<h1>404 | Page Not Found !!</h1>");
 // });
 
+// => Form Parser Middleware -
+// app.use(express.urlencoded({ extended: false }));
+
+// => JSON Parser Middleware - 
+// app.use(express.json());
+
 // => Listening to the server
 // const PORT = 3500;
 // const URL = "localhost";

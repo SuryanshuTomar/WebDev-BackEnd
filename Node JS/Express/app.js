@@ -1,7 +1,8 @@
 const express = require("express");
+const morgan = require("morgan");
 const app = express();
 
-const morgan = require("morgan");
+const { people } = require("./data/data");
 const { logger } = require("./logger");
 const { authorize } = require("./authorize");
 
@@ -14,12 +15,52 @@ const { authorize } = require("./authorize");
 // using third party logger middleware
 app.use(morgan("tiny"));
 
+// serving static files
+app.use(express.static("./methods-public"));
+
+// Form Parser
+app.use(express.urlencoded({ extended: false }));
+
+// JSON Parser
+app.use(express.json());
+
 app.get("/", (req, res) => {
 	res.send("Home");
 });
 
 app.get("/about", (req, res) => {
 	res.send("About");
+});
+
+app.get("/api/people", (req, res) => {
+	res.status(200).json({
+		success: true,
+		data: people,
+	});
+});
+
+app.post("/api/people", (req, res) => {
+	console.log(req.body);
+	const { name } = req.body;
+	if (name !== "") {
+		res.status(201).json({
+			success: true,
+			data: people,
+		});
+	} else {
+		res.status(401).send("Authorization Failed !!");
+	}
+});
+
+// Handling post request for the form that is in method-public folder
+app.post("/login", (req, res) => {
+	console.log(req.body);
+	const { name } = req.body;
+	if (name === "john") {
+		res.status(200).send(`Welcome ${name} !`);
+	} else {
+		res.status(401).send("Authorization Failed !!");
+	}
 });
 
 app.get("/products", (req, res) => {
