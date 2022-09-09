@@ -9,6 +9,9 @@ const tasksRouter = require("./routes/tasks.routes");
 // Express app -
 const app = express();
 
+// configuring Environment variables
+require("dotenv").config();
+
 // Middlewares -
 // body parser
 app.use(express.json());
@@ -24,7 +27,7 @@ app.get("/", (req, res) => {
 
 const startServer = async () => {
 	try {
-		await connectDB();
+		await connectDB(process.env.MONGO_URI);
 		// Listerning to server -
 		const PORT = 3500;
 		const HOST = "localhost";

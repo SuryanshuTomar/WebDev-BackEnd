@@ -1,13 +1,8 @@
 const mongoose = require("mongoose");
 
-const connectionString =
-	"mongodb+srv://Death:Death@nodeexpressproject.ggrfm4l.mongodb.net/Task-Manager-API?retryWrites=true&w=majority";
-// const connectionString =
-// 	"mongodb+srv://<DatabaseUsername>:<DatabasePassword>@nodeexpressproject.ggrfm4l.mongodb.net/<DatabaseName>?retryWrites=true&w=majority";
-
-const connectDB = (url) => {
+const connectDB = (ConnectionURL) => {
 	return mongoose
-		.connect(connectionString, {
+		.connect(ConnectionURL, {
 			useNewUrlParser: true,
 			useCreateIndex: true,
 			useFindAndModify: false,
