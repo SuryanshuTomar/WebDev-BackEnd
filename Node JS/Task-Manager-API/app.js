@@ -2,7 +2,7 @@
 const express = require("express");
 const morgan = require("morgan");
 
-const { tasksRouter } = require("./routes/tasks.routes");
+const tasksRouter = require("./routes/tasks.routes");
 
 // Express app -
 const app = express();
