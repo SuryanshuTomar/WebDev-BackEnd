@@ -1,8 +1,17 @@
 const mongoose = require("mongoose");
 
 const TaskSchema = new mongoose.Schema({
-	name: String,
-	completed: Boolean,
+	name: {
+		type: String,
+		trim: true,
+		required: [true, "Must provide a 'name'"],
+		minlength: [2, "'name' cannot be less than 2 charachters"],
+		maxlength: [20, "'name' cannot be more than 20 charachters"],
+	},
+	completed: {
+		type: Boolean,
+		default: false,
+	},
 });
 
 // Models are fancy constructors compiles from Schema definitions. An instance of a model is called a document. Models are responsible for creating and reading documents from the underlying MongoDB database.
