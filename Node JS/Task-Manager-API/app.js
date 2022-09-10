@@ -1,6 +1,5 @@
 // Imports -
 const express = require("express");
-const { connect } = require("mongoose");
 const morgan = require("morgan");
 const connectDB = require("./db/connect");
 
