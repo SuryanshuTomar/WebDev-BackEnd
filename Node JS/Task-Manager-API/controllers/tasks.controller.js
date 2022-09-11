@@ -4,10 +4,7 @@ const Task = require("../models/tasks.models");
 const getAllTasks = async (req, res) => {
 	try {
 		const tasks = await Task.find({});
-		res.status(200).json({
-			success: true,
-			data: tasks,
-		});
+		res.status(200).json({ success: true, tasks: tasks });
 	} catch (err) {
 		res.status(500).json({
 			success: false,
@@ -20,8 +17,7 @@ const createTask = async (req, res) => {
 	try {
 		const task = await Task.create(req.body);
 		res.status(201).json({
-			success: true,
-			data: task,
+			task: task,
 		});
 	} catch (err) {
 		res.status(500).json({
@@ -45,7 +41,7 @@ const getTask = async (req, res) => {
 
 		res.status(200).json({
 			success: true,
-			data: task,
+			task: task,
 		});
 	} catch (err) {
 		res.status(500).json({
@@ -58,7 +54,7 @@ const getTask = async (req, res) => {
 const updateTask = async (req, res) => {
 	try {
 		const { id: taskId } = req.params;
-		const updatedTask = await Task.findOneAndUpdate(
+		const task = await Task.findOneAndUpdate(
 			{ _id: taskId },
 			req.body,
 			{ new: true, runValidators: true }
@@ -67,7 +63,7 @@ const updateTask = async (req, res) => {
 			// 2. The validation for the current model will not run which we have defined in our schema.
 		);
 
-		if (!updatedTask) {
+		if (!task) {
 			return res.status(404).json({
 				success: false,
 				msg: `No task with id : ${taskId} found `,
@@ -76,7 +72,7 @@ const updateTask = async (req, res) => {
 
 		res.status(200).json({
 			success: true,
-			data: updatedTask,
+			task: task,
 		});
 	} catch (err) {
 		res.status(500).json({
@@ -89,9 +85,9 @@ const updateTask = async (req, res) => {
 const deleteTask = async (req, res) => {
 	try {
 		const { id: taskId } = req.params;
-		const deletedTask = await Task.findOneAndDelete({ _id: taskId });
+		const task = await Task.findOneAndDelete({ _id: taskId });
 
-		if (!deletedTask) {
+		if (!task) {
 			return res.status(404).json({
 				success: false,
 				msg: `No task found with id : ${taskId}`,
@@ -100,7 +96,7 @@ const deleteTask = async (req, res) => {
 
 		res.status(200).json({
 			success: true,
-			data: deletedTask,
+			task: task,
 		});
 	} catch (err) {
 		res.status(500).json({
