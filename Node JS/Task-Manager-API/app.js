@@ -12,6 +12,9 @@ const app = express();
 require("dotenv").config();
 
 // Middlewares -
+// Serving the front-end static files
+app.use(express.static("./public"));
+
 // body parser
 app.use(express.json());
 // logger
