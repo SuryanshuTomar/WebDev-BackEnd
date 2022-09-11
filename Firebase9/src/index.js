@@ -4,6 +4,7 @@ import {
 	getFirestore,
 	collection,
 	getDocs,
+	getDoc,
 	onSnapshot,
 	addDoc,
 	updateDoc,
@@ -14,6 +15,13 @@ import {
 	orderBy,
 	serverTimestamp,
 } from "firebase/firestore";
+
+import {
+	getAuth,
+	createUserWithEmailAndPassword,
+	signInWithPopup,
+	GoogleAuthProvider,
+} from "firebase/auth";
 
 // -> Firebase config settings of our app from the firebase console.
 const firebaseConfig = {
@@ -29,7 +37,9 @@ const firebaseConfig = {
 initializeApp(firebaseConfig);
 
 // -> Init Services
-const db = getFirestore();
+const db = getFirestore(); // DB Instance
+const auth = getAuth(); // AuthInstance
+const provider = new GoogleAuthProvider(); //  GoogleAuth Instance
 
 // -> Collection Ref
 const colRef = collection(db, "books"); // collection(FirebaseInstance(database), collectionName)
@@ -46,9 +56,10 @@ const colRef = collection(db, "books"); // collection(FirebaseInstance(database)
 // 	})
 // 	.catch((error) => console.error(error));
 
-// -> Real Time collection Data
+// -> Real Time Collection Of Data (Setting collection subscription)
 // This will get us the latest snapshot of the collection every time there is a change in the collection.
-// onSnapshot(collectionReference, callBackfunction) => The callbackFunction will run every time there is change in the collection and it will return the latest snapshot of the collection
+// onSnapshot(collectionReference, callBackfunction) => The callbackFunction will run every time there is change in the collection and it will return the latest snapshot of the collection.
+// This is also called Setting a Subscription.
 // onSnapshot(colRef, (snapshot) => {
 // 	let books = [];
 // 	snapshot.docs.forEach((doc) => {
@@ -68,6 +79,7 @@ const colRef = collection(db, "books"); // collection(FirebaseInstance(database)
 // 	where("author", "==", "Jane"),
 // 	orderBy("title", "desc") // by default it will be ascending
 // );
+
 const bookQueryRef = query(colRef, orderBy("createdAt"));
 onSnapshot(bookQueryRef, (snapshot) => {
 	let books = [];
@@ -95,7 +107,7 @@ addBookForm.addEventListener("submit", (event) => {
 // -> Deleting documents
 // - First, get the reference of the document you want to delete using doc()
 // - Second, call the deleteDoc() method
-// doc(FirebaseInstance(database), collectionName)
+// doc(FirebaseInstance(database), collectionName, documentId)
 // deleteDoc(docReference);
 const deleteBookForm = document.querySelector(".delete");
 deleteBookForm.addEventListener("submit", (event) => {
@@ -105,4 +117,47 @@ deleteBookForm.addEventListener("submit", (event) => {
 	deleteDoc(docRef)
 		.then(() => deleteBookForm.reset())
 		.catch(() => console.log(doc));
+});
+
+// -> Get Single Document
+// - Get the reference of the document you want to delete using doc()
+// doc(FirebaseInstance(database), collectionName, documentId)
+const docRef = doc(db, "books", "iJz8JBjWlSUNVqjI7M68");
+// getDoc(docRef)
+// 	.then((doc) => console.log(doc.data(), doc.id))
+// 	.catch((err) => console.log(err));
+
+// -> Real Time collection on a Single doc (setting subscription on a single doc)
+// onSnapshot(documentReference, callBackfunction)
+// If pass a documentReference instead of collectionReference, then it will set a Real Time subscription for that document.
+onSnapshot(docRef, (docSnapshot) => {
+	console.log(docSnapshot.data(), docSnapshot.id);
+});
+
+// -> Updating the Document
+const updateDocForm = document.querySelector(".update");
+updateDocForm.addEventListener("submit", (event) => {
+	event.preventDefault();
+	const docRef = doc(db, "books", updateDocForm.id.value);
+	updateDoc(docRef, {
+		title: "New Title",
+	})
+		.then(() => updateDocForm.reset())
+		.catch((err) => console.log(err));
+});
+
+// -> Signing Users up
+// createUserWithEmailAndPassword(AuthInstance, email, password);
+// This will create a new user with the provided email and password.
+const signUpForm = document.querySelector(".signup");
+signUpForm.addEventListener("submit", (event) => {
+	event.preventDefault();
+	const email = signUpForm.email.value;
+	const password = signUpForm.password.value;
+	createUserWithEmailAndPassword(auth, email, password)
+		.then((credential) => {
+			console.log("User created : ", credential.user);
+			signUpForm.reset();
+		})
+		.catch((err) => console.log(err));
 });
