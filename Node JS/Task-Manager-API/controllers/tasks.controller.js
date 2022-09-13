@@ -64,6 +64,7 @@ const updateTask = async (req, res) => {
 			// 1. The findOneAndUpdate() will return the old document
 			// 2. The validation for the current model will not run which we have defined in our schema.
 			// 3. The overwrite:true property should be used with put() method when we want to update the old data with the new JSON data object which has a completely different structure from before. But it is rarely used.
+			// Note: put() and patch() though are used interchangebly in mongoose/mongodb projects
 		);
 
 		if (!task) {
