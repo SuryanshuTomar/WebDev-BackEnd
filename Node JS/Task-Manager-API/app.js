@@ -4,6 +4,7 @@ const morgan = require("morgan");
 const connectDB = require("./db/connect");
 
 const tasksRouter = require("./routes/tasks.routes");
+const notFound = require("./middlewares/not-found");
 
 // Express app -
 const app = express();
@@ -19,14 +20,13 @@ app.use(express.static("./public"));
 app.use(express.json());
 // logger
 app.use(morgan("tiny"));
+// Not Found route handler middleware
+app.use(notFound);
 
 // Routes -
 app.use("/api/v1/tasks", tasksRouter);
 
-app.get("/", (req, res) => {
-	res.status(200).send("Task Manager APP");
-});
-
+// Start Server only when we are connected to the DB -
 const startServer = async () => {
 	try {
 		await connectDB(process.env.MONGO_URI);
