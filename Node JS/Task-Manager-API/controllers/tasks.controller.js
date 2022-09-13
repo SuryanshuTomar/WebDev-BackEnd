@@ -1,5 +1,6 @@
 const { findOneAndUpdate, schema } = require("../models/tasks.models");
 const Task = require("../models/tasks.models");
+const { put } = require("../routes/tasks.routes");
 
 const getAllTasks = async (req, res) => {
 	try {
@@ -57,10 +58,12 @@ const updateTask = async (req, res) => {
 		const task = await Task.findOneAndUpdate(
 			{ _id: taskId },
 			req.body,
-			{ new: true, runValidators: true }
+			{ new: true, runValidators: true,  }
+			// { new: true, runValidators: true, overwrite:true }
 			// The third paramter whic is the options object is mandatory, if we don't use this options object then :
 			// 1. The findOneAndUpdate() will return the old document
 			// 2. The validation for the current model will not run which we have defined in our schema.
+			// 3. The overwrite:true property should be used with put() method when we want to update the old data with the new JSON data object which has a completely different structure from before. But it is rarely used.
 		);
 
 		if (!task) {
