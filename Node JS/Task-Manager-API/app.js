@@ -5,6 +5,7 @@ const connectDB = require("./db/connect");
 
 const tasksRouter = require("./routes/tasks.routes");
 const notFound = require("./middlewares/not-found");
+const errorHandlerMiddleware = require("./middlewares/error-handler");
 
 // Express app -
 const app = express();
@@ -26,6 +27,9 @@ app.use("/api/v1/tasks", tasksRouter);
 
 // Not Found route handler middleware
 app.use(notFound);
+
+// Error Handler middleware
+app.use(errorHandlerMiddleware);
 
 // Start Server only when we are connected to the DB -
 const startServer = async () => {
