@@ -20,11 +20,12 @@ app.use(express.static("./public"));
 app.use(express.json());
 // logger
 app.use(morgan("tiny"));
+
+// Routes
+app.use("/api/v1/tasks", tasksRouter);
+
 // Not Found route handler middleware
 app.use(notFound);
-
-// Routes -
-app.use("/api/v1/tasks", tasksRouter);
 
 // Start Server only when we are connected to the DB -
 const startServer = async () => {
