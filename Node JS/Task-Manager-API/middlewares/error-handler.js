@@ -1,3 +1,4 @@
+// Custom Error Handler for server side error
 const errorHandlerMiddleware = (err, req, res, next) => {
 	return res.status(500).json({ msg: err.message });
 };
