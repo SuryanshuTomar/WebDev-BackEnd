@@ -61,13 +61,15 @@ const colRef = collection(db, "books"); // collection(FirebaseInstance(database)
 
 // -> Real Time Collection Of Data (Setting collection subscription)
 // This will get us the latest snapshot of the collection every time there is a change in the collection.
-// onSnapshot(collectionReference, callBackfunction) => The callbackFunction will run every time there is change in the collection and it will return the latest snapshot of the collection.
+// onSnapshot(collectionReference, callBackfunctionForLatestSnapShot, callBackFunctionForErrorHandling) => The callbackFunction will run every time there is change in the collection and it will return the latest snapshot of the collection.
 // This is also called Setting a Subscription.
 // onSnapshot(colRef, (snapshot) => {
 // 	let books = [];
 // 	snapshot.docs.forEach((doc) => {
 // 		books.push({ ...doc.data(), id: doc.id });
-// 	});
+// 	}, (error) => {
+// 	console.log(error);
+// });
 // 	console.log(books);
 // });
 
