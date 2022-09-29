@@ -1,10 +1,10 @@
-const CustomAPIError = require("../errors/custom-error");
 const jwt = require("jsonwebtoken");
+const { BadRequestError } = require("../errors/index");
 
 const login = async (req, res) => {
 	const { username, password } = req.body;
 	if (!username || !password) {
-		throw new CustomAPIError("Please provide email and password!! ", 400);
+		throw new BadRequestError("Please provide email and password!! ");
 	}
 
 	const id = new Date().getDate();
@@ -17,7 +17,6 @@ const login = async (req, res) => {
 };
 
 const dashBoard = async (req, res) => {
-	console.log(req.user);
 	// Send Data
 	const luckyNumber = Math.floor(Math.random() * 100);
 	res.status(200).json({

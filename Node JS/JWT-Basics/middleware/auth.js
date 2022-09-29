@@ -1,12 +1,12 @@
 const jwt = require("jsonwebtoken");
-const CustomAPIError = require("../errors/custom-error");
+const { UnauthenticatedError } = require("../errors/index.js");
 
 const authenticationMiddleware = async (req, res, next) => {
 	const { authorization } = req.headers;
 
 	// If token is not provided or if token bearer is wrong
 	if (!authorization || !authorization.startsWith("Bearer ")) {
-		throw new CustomAPIError("No Token Provided!! ", 401);
+		throw new UnauthenticatedError("No Token Provided!! ");
 	}
 
 	// Checking if the token provided is correct
@@ -17,7 +17,7 @@ const authenticationMiddleware = async (req, res, next) => {
 		const { id, username } = decodedToken;
 		req.user = { id, username };
 	} catch (err) {
-		throw new CustomAPIError("Not Authorized to access this route", 401);
+		throw new UnauthenticatedError("Not Authorized to access this route");
 	}
 
 	next();
