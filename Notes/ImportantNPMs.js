@@ -13,6 +13,7 @@
 // 4. cors - For Cross Origin Resource Sharing
 // 5. express - expressJS framework
 // 6. immer - for updating the complex state in redux and react easily
+// 7. redux-logger - for logging redux states
 
 // = React Packages -
 // 1. React Router -> npm install react-router-dom
