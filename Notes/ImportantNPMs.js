@@ -14,7 +14,14 @@
 // 5. express - expressJS framework
 // 6. immer - for updating the complex state in redux and react easily
 // 7. redux-logger - for logging redux states
+// 8. bcrypt - for hashing passwords
+// 9. validator- for validating emails and passwords
+// 10. jsonwebtoken - for creating jwt(Json Web Tokens)
 
 // = React Packages -
 // 1. React Router -> npm install react-router-dom
 // 2. Styles Components -> npm install styled-components
+// 3. Framer Motion - npm install framer-motion
+// 4. TanStack React Query ->
+//           npm install @tanstack/react-query and @tanstack/react-query-devtools.
+// 5. Redux Toolkit and Redux -> npm install @reduxjs/toolkit and npm install react-redux
