@@ -10,7 +10,7 @@
 //     eg -> npm json-server -w data/products.json -p 3500
 
 // = Prod Packages -
-// 1. Data Functions -> npm i data-fns
+// 1. Date Functions and Formatting -> npm i data-fns
 // 2. UUID - Unique RFC ID -> npm i uuid -> const {v4:uuid} = require("uuid")
 // 3. ShortID - Unique Short ID Generator -> npm i shortid
 // 4. cors - For Cross Origin Resource Sharing
