@@ -21,6 +21,7 @@
 // 9. cryptojs - more reliable library for hashing passowords
 // 10. validator- for validating emails and passwords
 // 11. jsonwebtoken - for creating jwt(Json Web Tokens)
+// 12. dotenv - for loading environment variables from a file(eg- .env) to node process.env
 
 // = React Packages -
 // 1. React Router -> npm install react-router-dom
