@@ -18,7 +18,7 @@
 // 6. immer - for updating the complex state in redux and react easily
 // 7. redux-logger - for logging redux states
 // 8. bcrypt - for hashing passwords
-// 9. cryptojs - more reliable library for hashing passowords
+// 9. crypto-js - more reliable library for hashing passowords
 // 10. validator- for validating emails and passwords
 // 11. jsonwebtoken - for creating jwt(Json Web Tokens)
 // 12. dotenv - for loading environment variables from a file(eg- .env) to node process.env
