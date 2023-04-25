@@ -1,3 +1,5 @@
 const gfName = "MissRandom";
 
-export { gfName };
+const generateRandomPercentage = () => `${~~(Math.random() * 100)}%`;
+
+export { gfName, generateRandomPercentage };

@@ -1,5 +1,5 @@
 import http from "http";
-import { gfName as girl } from "./features.js";
+import { gfName as girl, generateRandomPercentage } from "./features.js";
 
 const server = http.createServer((req, res) => {
 	console.log(req.url);
@@ -7,6 +7,7 @@ const server = http.createServer((req, res) => {
 });
 
 console.log(girl);
+console.log(generateRandomPercentage());
 
 server.listen(8000, () => {
 	console.log("Server Online !");
