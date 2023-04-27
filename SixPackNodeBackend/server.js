@@ -3,6 +3,9 @@ import path from "path";
 
 const app = express();
 
+// Using this middleware we will be able accesss data sent from client side form
+app.use(express.urlencoded({ extended: true }));
+
 // We can also serve static files using the static() method provided by the express
 // But Those files must be present in the public folder
 // Also static() method is a middleware so we have to put it inside use() method of our app.
@@ -12,6 +15,7 @@ app.use(express.static(path.join(path.resolve(), "public")));
 // so that it can then render view file from views folder
 app.set("view engine", "ejs");
 
+// Get Path
 app.get("/home", (req, res) => {
 	// res.sendStatus(200);
 	// res.status(200).send("Home");
@@ -29,6 +33,12 @@ app.get("/home", (req, res) => {
 	// Now we can just send the file using sendFile() of res after we are done
 	// with the setup of express.static();
 	// res.sendFile("index");
+});
+
+// Post Path
+app.post("/home", (req, res) => {
+	console.log(req.body);
+	res.render("index", { data: "Form Data Submitted Successfully !" });
 });
 
 app.listen(8000, "localhost", () => {
