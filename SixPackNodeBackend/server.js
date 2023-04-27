@@ -12,7 +12,7 @@ app.use(express.static(path.join(path.resolve(), "public")));
 // so that it can then render view file from views folder
 app.set("view engine", "ejs");
 
-app.get("/", (req, res) => {
+app.get("/home", (req, res) => {
 	// res.sendStatus(200);
 	// res.status(200).send("Home");
 
@@ -24,11 +24,11 @@ app.get("/", (req, res) => {
 	// res.sendFile(path.join(currentDir, "./index.html"));
 
 	// Render view file
-	// res.render("index", { name: "Alex" });
+	res.render("index", { name: "Alex" });
 
 	// Now we can just send the file using sendFile() of res after we are done
 	// with the setup of express.static();
-	res.sendFile("index");
+	// res.sendFile("index");
 });
 
 app.listen(8000, "localhost", () => {
