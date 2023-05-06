@@ -18,6 +18,7 @@ model Product {
   name       String   @unique
   price      Int      @default(999)
   createdAt  DateTime @default(now())
+  quantity   Int      @default(1)
   category   Category @relation(fields: [categoryId], references: [id])
   categoryId Int
 }
