@@ -13,3 +13,7 @@
 // To create a new table in Prisma we need to first migrate the DB
 // - npx prisma migrate dev
 // and then provide the info
+
+// To Generate model definition again after modifying the model -
+// - npx prisma generate
+// - npx prisma migrate dev
