@@ -9,7 +9,6 @@ rootRouter.get("/new-page(.html)?", (req, res) => {
 	res.render("new-page");
 });
 
-// routes
 rootRouter.get("/old-page(.html)?", (req, res) => {
 	res.status(301).render("new-page");
 });
