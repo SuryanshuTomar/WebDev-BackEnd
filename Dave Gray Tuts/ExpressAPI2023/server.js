@@ -6,15 +6,17 @@ require("dotenv").config({ path: "./config.env" });
 
 // App Setup
 const path = require("path");
+const cookieParser = require("cookie-parser");
 const app = express();
 
 // Serving static files from server
 app.use(express.static(path.join(path.resolve(), "css")));
+app.use(express.static(path.join(__dirname, "img")));
 
 // Setting view engine
 app.set("view engine", "ejs");
 
-// App middlewares
+// App middlewaress
 app.use(
 	cors({
 		origin: ["https://localhost:5173"],
@@ -24,11 +26,16 @@ app.use(
 );
 app.use(morgan("tiny"));
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 
 // Routes
 app.get("/", (req, res) => {
 	res.render("index", { name: "Alex" });
+});
+
+app.get("/new-page", (req, res) => {
+	res.render("new-page");
 });
 
 // API Route middlewares
