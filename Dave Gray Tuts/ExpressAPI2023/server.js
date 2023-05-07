@@ -9,7 +9,10 @@ const path = require("path");
 const app = express();
 
 // Serving static files from server
-app.use(express.static(path.join()));
+app.use(express.static(path.join(path.resolve(), "css")));
+
+// Setting view engine
+app.set("view engine", "ejs");
 
 // App middlewares
 app.use(
@@ -24,6 +27,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Routes
+app.get("/", (req, res) => {
+	res.render("index", { name: "Alex" });
+});
 
 // API Route middlewares
 
