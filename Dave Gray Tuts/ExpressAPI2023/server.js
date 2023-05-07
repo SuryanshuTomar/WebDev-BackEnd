@@ -30,12 +30,16 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 
 // Routes
-app.get("/", (req, res) => {
+app.get("/$|index(.html)?", (req, res) => {
 	res.render("index", { name: "Alex" });
 });
 
-app.get("/new-page", (req, res) => {
+app.get("/new-page(.html)?", (req, res) => {
 	res.render("new-page");
+});
+
+app.get("/*", (req, res) => {
+	res.status(404).render("404");
 });
 
 // API Route middlewares
