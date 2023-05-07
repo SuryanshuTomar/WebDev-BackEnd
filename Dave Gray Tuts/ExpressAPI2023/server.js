@@ -3,18 +3,19 @@
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 require("dotenv").config({ path: "./config.env" });
 
 // -------------------------------------------------------------------------------------
 // App Setup
 const path = require("path");
-const cookieParser = require("cookie-parser");
 const app = express();
 
 // -------------------------------------------------------------------------------------
 // Serving static files from server
-app.use(express.static(path.join(path.resolve(), "css")));
-app.use(express.static(path.join(__dirname, "img")));
+// app.use(express.static(path.join(path.resolve(), "css")));
+// app.use(express.static(path.join(__dirname, "img")));
+app.use(express.static(path.join(path.resolve(), "public")));
 
 // Setting view engine
 app.set("view engine", "ejs");
