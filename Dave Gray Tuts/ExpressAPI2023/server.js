@@ -6,6 +6,9 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 require("dotenv").config({ path: "./config.env" });
 
+const { logger } = require("./middlewares/logEvents");
+const errorHandler = require("./middlewares/errorHandler");
+
 // -------------------------------------------------------------------------------------
 // App Setup
 const path = require("path");
@@ -21,14 +24,30 @@ app.use(express.static(path.join(path.resolve(), "public")));
 app.set("view engine", "ejs");
 
 // -------------------------------------------------------------------------------------
+// Custom Middleware - Logger
+app.use(logger);
+
+// -------------------------------------------------------------------------------------
 // App middlewares
-app.use(
-	cors({
-		origin: ["https://localhost:5173"],
-		method: ["GET", "POST", "PUT", "DELETE"],
-		credentials: true,
-	})
-);
+const whitelist = ["http://localhost:8000", "http://127.0.0.1:8000"];
+const corsOptions = {
+	origin: (origin, cbFn) => {
+		// if the origin is localhost then it will be undefined in that case and
+		// if the origin which requested the server is present in the whitelist then OK.
+		if (!origin ?? whitelist.includes(origin)) {
+			cbFn(null, true);
+		}
+		// else throw a new error
+		else {
+			cbFn(new Error("Not allowed by CORS"));
+		}
+	},
+	optionsSuccessStatus: 200,
+	method: ["GET", "POST", "PUT", "DELETE"],
+	credentials: true,
+};
+
+app.use(cors(corsOptions));
 app.use(morgan("tiny"));
 app.use(express.json());
 app.use(cookieParser());
@@ -44,8 +63,12 @@ app.get("/new-page(.html)?", (req, res) => {
 	res.render("new-page");
 });
 
-app.get("/*", (req, res) => {
-	res.status(404).render("404");
+app.get("/subdir", (req, res) => {
+	res.render("subdir/index");
+});
+
+app.get("/test", (req, res) => {
+	res.render("subdir/test");
 });
 
 // -------------------------------------------------------------------------------------
@@ -68,7 +91,19 @@ const three = (req, res, next) => {
 app.get("/chain(.html)?", [one, two, three]);
 
 // -------------------------------------------------------------------------------------
+// API Route Not-Found handler
+// app.use(), doesn't accepts regex for paths.
+// app.all(), accepts all http methods and regex for path as well.
+app.all("*", (req, res) => {
+	res.status(404).render("404");
+});
+
+// -------------------------------------------------------------------------------------
 // API Route middlewares
+
+// -------------------------------------------------------------------------------------
+// Custom Middleware - Error Handler
+app.use(errorHandler);
 
 // -------------------------------------------------------------------------------------
 // Start Server
