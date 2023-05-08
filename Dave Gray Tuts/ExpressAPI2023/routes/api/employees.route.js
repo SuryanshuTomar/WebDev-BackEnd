@@ -1,10 +1,12 @@
 // imports
 const express = require("express");
-const path = require("path");
-
-// Local File DB Data
-const data = {};
-data.employees = require("../../data/data.json");
+const {
+	getAllEmployees,
+	createEmployee,
+	updateEmployee,
+	deleteEmployee,
+	getEmployee,
+} = require("../../controllers/employees.controller");
 
 // setup router
 const employeeRouter = express.Router();
@@ -12,32 +14,12 @@ const employeeRouter = express.Router();
 // routes
 employeeRouter
 	.route("/")
-	.get((req, res) => {
-		res.send(data.employees);
-	})
-	.post((req, res) => {
-		res.json({
-			firstName: req.body.firstname,
-			lastName: req.body.lastname,
-		});
-	})
-	.put((req, res) => {
-		res.json({
-			firstName: req.body.firstname,
-			lastName: req.body.lastname,
-		});
-	})
-	.delete((req, res) => {
-		res.json({
-			id: req.body.id,
-		});
-	});
+	.get(getAllEmployees)
+	.post(createEmployee)
+	.put(updateEmployee)
+	.delete(deleteEmployee);
 
-employeeRouter.route("/:id").get((req, res) => {
-	res.json({
-		id: req.params.id,
-	});
-});
+employeeRouter.route("/:id").get(getEmployee);
 
 // exports
 module.exports = { employeeRouter };
