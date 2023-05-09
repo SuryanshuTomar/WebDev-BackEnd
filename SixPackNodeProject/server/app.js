@@ -1,5 +1,5 @@
 // imports
-import express, { urlencoded } from "express";
+import express from "express";
 import userRouter from "./routes/users.route.js";
 import taskRouter from "./routes/tasks.route.js";
 import { errorMiddleware } from "./middlewares/error.js";
@@ -14,7 +14,7 @@ export const app = express();
 // cors middleware
 app.use(
 	cors({
-		origin: [process.env.FRONTEND_URL], // cross orgin domain that are allowed.
+		origin: [process.env.FRONTEND_URL, "http://localhost:5173"], // cross orgin domain that are allowed.
 		method: ["GET", "POST", "PUT", "DELETE"], // methods allowed in cross origin
 		credentials: true, // by default it is set to false and if false then whatever headers we are sending from server won't reach the client along with cookies
 	})
