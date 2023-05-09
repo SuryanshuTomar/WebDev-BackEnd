@@ -12,9 +12,13 @@ export const app = express();
 
 // - Middlewares -
 // cors middleware
+app.use((req, res, next) => {
+	console.log(req.headers.origin);
+	next();
+});
 app.use(
 	cors({
-		origin: [process.env.FRONTEND_URL], // cross orgin domain that are allowed.
+		origin: [process.env.FRONTEND_URL, "http://127.0.0.1:5173"], // cross orgin domain that are allowed.
 		method: ["GET", "POST", "PUT", "DELETE"], // methods allowed in cross origin
 		credentials: true, // by default it is set to false and if false then whatever headers we are sending from server won't reach the client along with cookies
 	})
