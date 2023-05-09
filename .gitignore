@@ -1,2 +1,4 @@
 node_modules
 /Node JS/Codes/app.js
+*.env
+node_modules
