@@ -1,3 +1,0 @@
-2022-05-10   11:49:48	905d16e5-5cf7-41d5-9dfe-5957ee6f1e09	Log Event Emitted
-2022-05-10   11:50:15	a7d34b20-31ba-4c78-8609-5f25a5ba72ff	Log Event Emitted
-2022-05-10   11:50:25	035ca2de-9caf-42d2-a909-a3035514275a	Log Event Emitted
