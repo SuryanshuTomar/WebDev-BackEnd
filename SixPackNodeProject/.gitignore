@@ -1,2 +1,7 @@
+<<<<<<< HEAD
+node_modules
+/Node JS/Codes/app.js
+=======
 *.env
 node_modules
+>>>>>>> a75be36 (Add your commit)
