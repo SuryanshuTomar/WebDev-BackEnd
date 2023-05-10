@@ -1,9 +1,13 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useContext, useState } from "react";
+import { Link, Navigate } from "react-router-dom";
 import fetchUser from "../axios/userInstance";
 import Toast from "react-hot-toast";
+import { AuthContext } from "../context/AuthContext";
 
 const Register = () => {
+	const { isAuthenticated, setIsAuthenticated, loading, setLoading } =
+		useContext(AuthContext);
+
 	const [formData, setFormData] = useState({
 		name: "",
 		email: "",
@@ -20,13 +24,27 @@ const Register = () => {
 	const submitHandler = async (event) => {
 		event.preventDefault();
 
-		const { data } = await fetchUser.post("/new", formData, {
-			withCredentials: true,
-		});
+		setLoading(true);
+		try {
+			const { data } = await fetchUser.post("/new", formData, {
+				withCredentials: true,
+			});
 
-		console.log(data);
-		Toast.success("User Registeration Complete!");
+			console.log(data);
+			Toast.success(data.message);
+			setIsAuthenticated(true);
+			setLoading(false);
+		} catch (error) {
+			console.log(error);
+			Toast.error(error.response.data.message);
+			setIsAuthenticated(false);
+			setLoading(false);
+		}
 	};
+
+	if (isAuthenticated) {
+		return <Navigate to={"/"} />;
+	}
 
 	return (
 		<div className="login">
@@ -56,7 +74,9 @@ const Register = () => {
 						value={formData.password}
 						onChange={formHandler}
 					/>
-					<button type="submit">Register</button>
+					<button disabled={loading} type="submit">
+						Register
+					</button>
 					<h4>Already have an account?</h4>
 					<Link to="/login">Sign In here</Link>
 				</form>
