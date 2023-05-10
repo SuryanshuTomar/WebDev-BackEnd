@@ -27,7 +27,8 @@
 // 13. axios - another package for fetching data, npm install axios
 // 14. sass - Sass is the most mature, stable, and powerful professional grade CSS extension language - npm install sass
 // 15. TailwindCSS - CSS Framework
-// 16. Prisma - it is an ORM for DB. -> npm i prisma and npm i prisma-client
+// 16. Prisma - it is an ORM for DB. -> npm i -D prisma and npm i @prisma/client
+// 17. http-errors - create custom http-errors for express
 
 // = React Packages -
 // 1. React Router -> npm install react-router-dom
