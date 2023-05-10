@@ -8,6 +8,8 @@
 // 5. json-server - It is used for creating a backend server from a json file which already has a data.
 //     CMD -> npx json-server -w(for watch) file_path -p(for port) port_number
 //     eg -> npm json-server -w data/products.json -p 3500
+// 6. morgan - express logger
+// 7. cookie-parser = npm install cookie-parser
 
 // = Prod Packages -
 // 1. Date Functions and Formatting -> npm i data-fns
@@ -17,11 +19,15 @@
 // 5. express - expressJS framework
 // 6. immer - for updating the complex state in redux and react easily
 // 7. redux-logger - for logging redux states
-// 8. bcrypt - for hashing passwords
+// 8. bcrypt - for hashing passwords (Better)
 // 9. crypto-js - more reliable library for hashing passowords
 // 10. validator- for validating emails and passwords
 // 11. jsonwebtoken - for creating jwt(Json Web Tokens)
 // 12. dotenv - for loading environment variables from a file(eg- .env) to node process.env
+// 13. axios - another package for fetching data, npm install axios
+// 14. sass - Sass is the most mature, stable, and powerful professional grade CSS extension language - npm install sass
+// 15. TailwindCSS - CSS Framework
+// 16. Prisma - it is an ORM for DB. -> npm i prisma and npm i prisma-client
 
 // = React Packages -
 // 1. React Router -> npm install react-router-dom
@@ -31,3 +37,4 @@
 //           npm install @tanstack/react-query and @tanstack/react-query-devtools.
 // 5. Redux Toolkit and Redux -> npm install @reduxjs/toolkit and npm install react-redux7
 // 6. Charts -> recharts and chartjs, Note: for React -> chartjs and react-chart-2 both needed
+// 7. React Toasts -> npm install react-hot-toast
