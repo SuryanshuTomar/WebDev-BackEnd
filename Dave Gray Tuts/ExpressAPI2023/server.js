@@ -11,11 +11,12 @@ const { subdirRouter } = require("./routes/subdir.route");
 const { rootRouter } = require("./routes/root.route");
 const errorHandler = require("./middlewares/errorHandler");
 const corsOptions = require("./config/corsOptions");
+const { employeeRouter } = require("./routes/api/employees.route");
+const usersRouter = require("./routes/api/users.route");
 
 // -------------------------------------------------------------------------------------
 // App Setup
 const path = require("path");
-const { employeeRouter } = require("./routes/api/employees.route");
 const app = express();
 
 // -------------------------------------------------------------------------------------
@@ -75,6 +76,7 @@ app.get("/chain(.html)?", [one, two, three]);
 app.use("/", rootRouter);
 app.use("/subdir", subdirRouter);
 app.use("/employees", employeeRouter);
+app.use("/users", usersRouter);
 
 // -------------------------------------------------------------------------------------
 // API Route Not-Found handler
