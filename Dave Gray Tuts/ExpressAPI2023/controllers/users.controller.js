@@ -11,7 +11,7 @@ const fsPromises = require("fs").promises;
 const path = require("path");
 const bcrypt = require("bcrypt");
 
-const createNewUser = async (req, res, next) => {
+const registerUser = async (req, res, next) => {
 	const { user, pass } = req.body;
 
 	try {
@@ -63,4 +63,53 @@ const createNewUser = async (req, res, next) => {
 	}
 };
 
-module.exports = { createNewUser };
+const loginUser = async (req, res, next) => {
+	try {
+		const { user, pass } = req.body;
+
+		if (!user || !pass) {
+			// check if both fields are present
+			// status code 400 -> bad request
+			return res.status(400).json({
+				success: false,
+				message: "Username and password are required!",
+			});
+		}
+
+		// check if the user presents in the DB or not.
+		const userPresent = usersDB.users.find((usr) => usr.username === user);
+
+		// if no user present then send the response.
+		if (!userPresent)
+			return res.status(404).json({
+				success: false,
+				message: "Incorrect username or password!",
+			});
+
+		// check if pass provided is correct password or not
+		const passMatch = await bcrypt.compare(pass, userPresent.password);
+
+		// if password does not match then send response
+		if (!passMatch)
+			return res.status(404).json({
+				success: false,
+				message: "Incorrect username or password!",
+			});
+
+		// if everything is correct then send correct response
+		res.status(200).json({
+			success: true,
+			data: userPresent,
+		});
+
+		//
+	} catch (error) {
+		console.log(error.mesage);
+		res.status(500).json({
+			success: false,
+			message: error.message,
+		});
+	}
+};
+
+module.exports = { registerUser, loginUser };
