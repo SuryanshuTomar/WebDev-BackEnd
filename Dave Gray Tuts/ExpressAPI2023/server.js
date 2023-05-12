@@ -13,6 +13,7 @@ const errorHandler = require("./middlewares/errorHandler");
 const corsOptions = require("./config/corsOptions");
 const { employeeRouter } = require("./routes/api/employees.route");
 const usersRouter = require("./routes/api/users.route");
+const { verifyToken } = require("./middlewares/verifyToken");
 
 // -------------------------------------------------------------------------------------
 // App Setup
@@ -75,8 +76,8 @@ app.get("/chain(.html)?", [one, two, three]);
 // API Route middlewares
 app.use("/", rootRouter);
 app.use("/subdir", subdirRouter);
-app.use("/employees", employeeRouter);
 app.use("/users", usersRouter);
+app.use("/employees", verifyToken, employeeRouter);
 
 // -------------------------------------------------------------------------------------
 // API Route Not-Found handler
