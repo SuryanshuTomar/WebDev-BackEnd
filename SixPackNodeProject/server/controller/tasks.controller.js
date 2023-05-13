@@ -29,7 +29,6 @@ const getAllTasks = async (req, res, next) => {
 	try {
 		// get current user _id
 		const userId = req.user._id;
-		console.log("logging");
 
 		// now get all task for the user who is logged in
 		const tasks = await Task.find({ user: userId });
