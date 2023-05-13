@@ -1,5 +1,5 @@
 const express = require("express");
-const usersRouter = express().usersRouter;
+const usersRouter = express.Router();
 
 const {
 	registerUser,
