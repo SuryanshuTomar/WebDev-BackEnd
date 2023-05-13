@@ -18,3 +18,16 @@ const corsOptions = {
 };
 
 module.exports = corsOptions;
+
+// cors npm configuring Notes -
+// https://www.npmjs.com/package/cors#configuration-options
+
+// Note -
+// "origin" option sets the -> Access-Control-Allow-Origin CORS header
+// "method" option sets the -> Access-Control-Allow-Methods CORS header
+// "credentials" option sets the -> Access-Control-Allow-Credentials CORS header
+// "maxAge" option sets the -> Access-Control-Max-Age  CORS header
+
+// Also if we have manually set the "Access-Control-Allow-Credentials" then the implementation is written in credentials.js file and just use as a normal middleware in the server.js file just before cors middleware like ->
+// const credentials = require("../middlewares/credentials");
+// app.use(credentials)
