@@ -111,7 +111,7 @@ const loginUser = async (req, res, next) => {
 		// Create Access Token from JWT
 		const accessToken = jwt.sign(
 			{
-				username: userPresent.user,
+				username: userPresent.username,
 			},
 			process.env.ACCESS_TOKEN_SECRET,
 			{ expiresIn: "30s" }
@@ -120,7 +120,7 @@ const loginUser = async (req, res, next) => {
 		// Create Access Token from JWT
 		const refreshToken = jwt.sign(
 			{
-				username: userPresent.user,
+				username: userPresent.username,
 			},
 			process.env.REFRESH_TOKEN_SECRET,
 			{ expiresIn: "1d" }
@@ -146,7 +146,7 @@ const loginUser = async (req, res, next) => {
 
 		// if everything is correct then send correct response
 		res.status(200)
-			.cookie("refToken", refreshToken, {
+			.cookie("reftoken", refreshToken, {
 				httpOnly: true,
 				maxAge: 24 * 60 * 60 * 1000,
 			})
@@ -174,7 +174,7 @@ const handleRefreshToken = async (req, res, next) => {
 
 		// if the cookie does not exists or the token property in cookies does not exists
 		// then send the Unauthorized response
-		if (!cookies?.refToken) {
+		if (!cookies?.reftoken) {
 			// check if both fields are present
 			// status code 401 -> Unauthorized
 			return res.status(401).json({
@@ -184,7 +184,7 @@ const handleRefreshToken = async (req, res, next) => {
 		}
 
 		// if the refToken is present in the cookie then
-		const refreshToken = cookies.refToken;
+		const refreshToken = cookies.reftoken;
 
 		// check if the user presents in the DB that matches the refreshToken that is sent to the server
 		const userPresent = usersDB.users.find(
