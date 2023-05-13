@@ -145,10 +145,12 @@ const loginUser = async (req, res, next) => {
 		);
 
 		// if everything is correct then send correct response
-		// Note: we also have to set the property "secure: true" also along with the httpOnly property in the cookie() method with the response (only on the production server and not in the development server)and this "secure" property will allow us to send the cookie along with response only to the https server.
+		// Note: we also have to set the property "secure: true" also along with the httpOnly property in the cookie() method with the response and this "secure" property will allow us to send the cookie along with response only to the https server.
 		res.status(200)
 			.cookie("reftoken", refreshToken, {
 				httpOnly: true,
+				sameSite: "none",
+				secure: true,
 				maxAge: 24 * 60 * 60 * 1000,
 			})
 			.json({
@@ -198,7 +200,11 @@ const logoutUser = async (req, res, next) => {
 		// if no user present then -> clear the cookie that is sent to us and then send the response.
 		if (!userPresent) {
 			// clear the cookie
-			res.clearCookie("reftoken", { httpOnly: true });
+			res.clearCookie("reftoken", {
+				httpOnly: true,
+				sameSite: "none",
+				secure: true,
+			});
 
 			// sending the response
 			// status code 204 -> success but no content to send back
@@ -226,7 +232,11 @@ const logoutUser = async (req, res, next) => {
 
 		// now clear the cookie and send the send response
 		// Note: we have to set the property "secure: true" also along with the httpOnly property and this "secure" property will allow us to send the cookie along with response only to the https server.
-		res.clearCookie("reftoken", { httpOnly: true });
+		res.clearCookie("reftoken", {
+			httpOnly: true,
+			sameSite: "none",
+			secure: true,
+		});
 
 		res.status(204).json({
 			success: true,
@@ -312,4 +322,4 @@ const handleRefreshToken = async (req, res, next) => {
 	}
 };
 
-module.exports = { registerUser, loginUser, logoutUser ,handleRefreshToken };
+module.exports = { registerUser, loginUser, logoutUser, handleRefreshToken };
