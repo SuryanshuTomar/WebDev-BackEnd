@@ -145,6 +145,7 @@ const loginUser = async (req, res, next) => {
 		);
 
 		// if everything is correct then send correct response
+		// Note: we also have to set the property "secure: true" also along with the httpOnly property in the cookie() method with the response (only on the production server and not in the development server)and this "secure" property will allow us to send the cookie along with response only to the https server.
 		res.status(200)
 			.cookie("reftoken", refreshToken, {
 				httpOnly: true,
@@ -152,13 +153,89 @@ const loginUser = async (req, res, next) => {
 			})
 			.json({
 				success: true,
-				data: userPresent,
+				data: currentUser,
 				accessToken,
 			});
 
 		//
 	} catch (error) {
-		console.log(error.mesage);
+		console.log(error.message);
+		res.status(500).json({
+			success: false,
+			message: error.message,
+		});
+	}
+};
+
+// Logout User Controller
+const logoutUser = async (req, res, next) => {
+	try {
+		// For logout we need to do 2 things
+		// 1. Remove the access token from the client side
+		// 2. Remove the refresh token from the user data in DB.
+
+		// get the cookies from the request object
+		const cookies = req.cookies;
+
+		// if the cookie does not exists or the reftoken property in cookies does not exists, then send the Unauthorized response
+		if (!cookies?.reftoken) {
+			// if either cookies or reftoken in cookies is missing then -> No problem cause the client is trying to logout.
+			// status code 204 -> success but no content to send back
+			return res.status(204).json({
+				success: false,
+				message: "No Content",
+			});
+		}
+
+		// if the refToken is present in the cookie then
+		const refreshToken = cookies.reftoken;
+
+		// check if the user presents in the DB that matches the refreshToken that is sent to the server -> checking if the provided refreshToken is present with any of the users present in the DB or not.
+		const userPresent = usersDB.users.find(
+			(usr) => usr.refreshToken === refreshToken
+		);
+
+		// if no user present then -> clear the cookie that is sent to us and then send the response.
+		if (!userPresent) {
+			// clear the cookie
+			res.clearCookie("reftoken", { httpOnly: true });
+
+			// sending the response
+			// status code 204 -> success but no content to send back
+			return res.status(204).json({
+				success: false,
+				message: "No Content",
+			});
+		}
+
+		// if the user is present in the DB -> Then we have to now delete the refreshToken from that user in the DB.
+		const otherUsers = usersDB.users.filter(
+			(user) => user.refreshToken !== userPresent.refreshToken
+		);
+		// removing the refreshToken from the user
+		const currentUser = { ...userPresent, refreshToken: "" };
+
+		// now updating the DB with
+		usersDB.setUsers([...otherUsers, currentUser]);
+
+		// now write the updated users data in the DB
+		await fsPromises.writeFile(
+			path.join(__dirname, "..", "data", "users.json"),
+			JSON.stringify(usersDB.users)
+		);
+
+		// now clear the cookie and send the send response
+		// Note: we have to set the property "secure: true" also along with the httpOnly property and this "secure" property will allow us to send the cookie along with response only to the https server.
+		res.clearCookie("reftoken", { httpOnly: true });
+
+		res.status(204).json({
+			success: true,
+			data: "No Content!",
+		});
+
+		//
+	} catch (error) {
+		console.log(error.message);
 		res.status(500).json({
 			success: false,
 			message: error.message,
@@ -172,10 +249,9 @@ const handleRefreshToken = async (req, res, next) => {
 		// get the cookies from the request object
 		const cookies = req.cookies;
 
-		// if the cookie does not exists or the token property in cookies does not exists
-		// then send the Unauthorized response
+		// if the cookie does not exists or the reftoken property in cookies does not exists then send the Unauthorized response
 		if (!cookies?.reftoken) {
-			// check if both fields are present
+			// if either cookies or reftoken in cookies is missing then send Unauthorized
 			// status code 401 -> Unauthorized
 			return res.status(401).json({
 				success: false,
@@ -186,7 +262,7 @@ const handleRefreshToken = async (req, res, next) => {
 		// if the refToken is present in the cookie then
 		const refreshToken = cookies.reftoken;
 
-		// check if the user presents in the DB that matches the refreshToken that is sent to the server
+		// check if the user presents in the DB that matches the refreshToken that is sent to the server -> checking if the provided refreshToken is present with any of the users present in the DB or not.
 		const userPresent = usersDB.users.find(
 			(usr) => usr.refreshToken === refreshToken
 		);
@@ -236,4 +312,4 @@ const handleRefreshToken = async (req, res, next) => {
 	}
 };
 
-module.exports = { registerUser, loginUser, handleRefreshToken };
+module.exports = { registerUser, loginUser, logoutUser ,handleRefreshToken };
