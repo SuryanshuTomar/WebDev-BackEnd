@@ -1,10 +1,10 @@
-const whitelist = ["http://localhost:8000", "http://127.0.0.1:8000"];
+const allowedOrigins = require("./allowedOrigins");
 
 const corsOptions = {
 	origin: (origin, cbFn) => {
 		// if the origin is localhost then it will be undefined in that case and
 		// if the origin which requested the server is present in the whitelist then OK.
-		if (!origin ?? whitelist.includes(origin)) {
+		if (!origin ?? allowedOrigins.includes(origin)) {
 			cbFn(null, true);
 		}
 		// else throw a new error
