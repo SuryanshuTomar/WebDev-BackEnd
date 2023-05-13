@@ -28,7 +28,7 @@ const Home = () => {
 		setLoading(true);
 		try {
 			const { data } = await fetchTask.post("/new", formData);
-			console.log(data);
+			// console.log(data);
 
 			let updatedTasks;
 			if (!tasks.length) {
@@ -54,7 +54,7 @@ const Home = () => {
 			// console.log(data.tasks);
 			setTasks(data.tasks);
 		} catch (error) {
-			// console.log(error);
+			console.log(error);
 			toast.error(error.response.data.message);
 		}
 	}, []);
@@ -66,7 +66,7 @@ const Home = () => {
 	const updateHandler = async (id) => {
 		try {
 			const { data } = await fetchTask.put(`/${id}`);
-			console.log(data);
+			// console.log(data);
 
 			const filteredTask = tasks.filter(
 				(task) => task._id !== data.task._id

@@ -27,7 +27,7 @@ const Login = () => {
 		try {
 			const { data } = await fetchUser.post("/login", formData);
 
-			console.log(data);
+			// console.log(data);
 			toast.success(data.message);
 			setIsAuthenticated(true);
 			setLoading(false);

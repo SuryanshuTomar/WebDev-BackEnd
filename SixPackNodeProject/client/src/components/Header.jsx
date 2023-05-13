@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import fetchUser from "../axios/userInstance";
 import { toast } from "react-hot-toast";
@@ -12,7 +12,7 @@ const Header = () => {
 		setLoading(true);
 		try {
 			const { data } = await fetchUser.get("/logout");
-			console.log(data);
+			// console.log(data);
 			toast.success("Logged Out!");
 			setIsAuthenticated(false);
 			setLoading(false);

@@ -3,12 +3,12 @@ import Profile from "./pages/Profile";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Header from "./components/Header";
-import fetchUser from "./axios/userInstance";
 import { Toaster } from "react-hot-toast";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "./context/AuthContext";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import NotFound from "./pages/NotFound";
+import fetchUser from "./axios/userInstance";
 
 const Layout = () => {
 	return (
@@ -58,13 +58,13 @@ function App() {
 				withCredentials: true,
 			})
 			.then((res) => {
-				console.log(res);
+				// console.log(res);
 				setUser(res.data.user);
 				setIsAuthenticated(true);
 				setLoading(false);
 			})
 			.catch((err) => {
-				console.log(err);
+				// console.log(err);
 				setUser({});
 				setIsAuthenticated(false);
 				setLoading(false);
