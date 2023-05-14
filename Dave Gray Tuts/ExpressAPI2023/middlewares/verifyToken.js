@@ -2,11 +2,11 @@ const jwt = require("jsonwebtoken");
 
 const verifyToken = (req, res, next) => {
 	// check if the authorization header is sent with the request
-	const authHeader = req.headers["authorization"];
+	const authHeader = req.headers["authorization"] || req.headers.Authorization;
+	// console.log(authHeader); // Bearer token
 
-	console.log(authHeader); // Bearer token
-	// if not sent then sent the unauthorized response
-	if (!authHeader) {
+	// if authHeader is not sent or if authHeader is sent but the authHeader does not starts with the "Bearer " in the token, then send the unauthorized response
+	if (!authHeader?.startsWith("Bearer ")) {
 		return res.status(401).json({
 			success: false,
 			message: "Unauthorized!!",
@@ -29,7 +29,8 @@ const verifyToken = (req, res, next) => {
 		// if there token sent to server is correct,
 		// then we see the decoded part from the token
 		// And attach the current user info from the decoded part token to the 'req' object, so that the request that is sent by user can now be handled by the next middleware request handler based on the current user.
-		req.user = decoded.username;
+		req.user = decoded.UserInfo.username;
+		req.roles = decoded.UserInfo.roles;
 
 		// call the next middleware
 		next();

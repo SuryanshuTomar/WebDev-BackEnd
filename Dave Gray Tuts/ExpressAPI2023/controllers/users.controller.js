@@ -41,7 +41,13 @@ const registerUser = async (req, res, next) => {
 		const hashedPass = await bcrypt.hash(pass, 10);
 
 		// create and store the new user
-		const newUser = { username: user, password: hashedPass };
+		const newUser = {
+			username: user,
+			password: hashedPass,
+			roles: {
+				User: 2001,
+			},
+		};
 		usersDB.setUsers([...usersDB.users, newUser]);
 
 		// write to localDB users.json file
@@ -99,6 +105,9 @@ const loginUser = async (req, res, next) => {
 				message: "Incorrect username or password!",
 			});
 
+		// if user and password is correct, then get all the user roles specified to the current user and attach it to the payload for accessToken ->
+		const roles = Object.values(userPresent.roles);
+
 		// Both the Access token and the Refresh Token needs to be sent to the client / user.
 		// Then, whenever the client need to access any resource that need authorization, the client need to send the access token with the request so that the server can verify that the request is sent by the authorized user.
 		// The Access Token need not to be stored in any kind of storage in the browser by in the memory of the client. So, that it cannot be access manually using the JS. And is removed from the memory whenver the app / client/ browser is closed.
@@ -108,18 +117,25 @@ const loginUser = async (req, res, next) => {
 		// These tokens also expires automatically when they expires and the user should logout when these tokens expires.
 		// Both the access token and the refresh token should be invalidated after the user logs out manually.
 
-		// Create Access Token from JWT
+		// More on -> https://jwt.io/introduction
+
+		// Create Access Token using JWT
 		const accessToken = jwt.sign(
 			{
-				username: userPresent.username,
+				// private claims
+				UserInfo: {
+					username: userPresent.username,
+					roles,
+				},
 			},
 			process.env.ACCESS_TOKEN_SECRET,
 			{ expiresIn: "30s" }
 		);
 
-		// Create Access Token from JWT
+		// Create Refresh Token using JWT
 		const refreshToken = jwt.sign(
 			{
+				// no need to attach the roles here as this refresh token is created to refresh accessToken which will be used to access authorized resources
 				username: userPresent.username,
 			},
 			process.env.REFRESH_TOKEN_SECRET,
@@ -297,9 +313,17 @@ const handleRefreshToken = async (req, res, next) => {
 					});
 				}
 
+				// Again get the user roles for the access token payload private claim
+				const roles = Object.values(userPresent.roles);
+
 				// if the valid refreshToken is provided then create a new access token
 				const accessToken = jwt.sign(
-					{ username: decoded.username },
+					{
+						UserInfo: {
+							username: decoded.username,
+							roles,
+						},
+					},
 					process.env.ACCESS_TOKEN_SECRET,
 					{ expiresIn: "30s" }
 				);
