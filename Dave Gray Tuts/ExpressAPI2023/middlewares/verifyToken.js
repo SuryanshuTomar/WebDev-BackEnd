@@ -20,6 +20,8 @@ const verifyToken = (req, res, next) => {
 	jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
 		// The status here is 403 -> forbidden as accessToken sent doesn't match
 		// And invalid token is sent
+
+		console.log(err);
 		if (err)
 			return res.status(403).json({
 				success: false,
