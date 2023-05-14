@@ -12,8 +12,8 @@ const verifyRoles = (...allowedRoles) => {
 		// create a copy of the allowedRoles
 		const rolesArr = [...allowedRoles];
 
-		console.log(rolesArr);
-		console.log(req.roles);
+		// console.log(rolesArr);
+		// console.log(req.roles);
 
 		// comparing the roles on the request object and the allowedRoles.
 		// and even if one of allowedRoles present in the request object "roles" property then it will return true to the result.
