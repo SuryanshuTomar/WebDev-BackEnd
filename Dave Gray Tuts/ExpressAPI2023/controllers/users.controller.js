@@ -165,8 +165,8 @@ const loginUser = async (req, res, next) => {
 		res.status(200)
 			.cookie("reftoken", refreshToken, {
 				httpOnly: true,
-				sameSite: "none",
-				secure: true,
+				sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
+				secure: process.env.NODE_ENV === "Development" ? false : true,
 				maxAge: 24 * 60 * 60 * 1000,
 			})
 			.json({
@@ -218,8 +218,8 @@ const logoutUser = async (req, res, next) => {
 			// clear the cookie
 			res.clearCookie("reftoken", {
 				httpOnly: true,
-				sameSite: "none",
-				secure: true,
+				sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
+				secure: process.env.NODE_ENV === "Development" ? false : true,
 			});
 
 			// sending the response
@@ -246,12 +246,13 @@ const logoutUser = async (req, res, next) => {
 			JSON.stringify(usersDB.users)
 		);
 
+		console.log(process.env.NODE_ENV);
 		// now clear the cookie and send the send response
 		// Note: we have to set the property "secure: true" also along with the httpOnly property and this "secure" property will allow us to send the cookie along with response only to the https server.
 		res.clearCookie("reftoken", {
 			httpOnly: true,
-			sameSite: "none",
-			secure: true,
+			sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
+			secure: process.env.NODE_ENV === "Development" ? false : true,
 		});
 
 		res.status(204).json({
