@@ -18,6 +18,7 @@ const { verifyToken } = require("./middlewares/verifyToken");
 // -------------------------------------------------------------------------------------
 // App Setup
 const path = require("path");
+const { connectDB } = require("./db/connectDb");
 const app = express();
 
 // -------------------------------------------------------------------------------------
@@ -92,8 +93,19 @@ app.use(errorHandler);
 
 // -------------------------------------------------------------------------------------
 // Start Server
-const PORT = process.env.PORT || 3500;
-const HOST = process.env.HOST || "localhost";
-app.listen(PORT, HOST, () => {
-	console.log(`Server listening on ${PORT}...`);
-});
+
+async function startServer() {
+	try {
+		await connectDB(process.env.DATABASE_URI);
+		const PORT = process.env.PORT || 3500;
+		const HOST = process.env.HOST || "localhost";
+		app.listen(PORT, HOST, () => {
+			console.log(`Server listening on ${PORT}...`);
+		});
+	} catch (error) {
+		console.log("Something Went Wrong!");
+		console.log(error.message);
+	}
+}
+
+startServer();
