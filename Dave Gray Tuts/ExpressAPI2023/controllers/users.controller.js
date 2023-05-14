@@ -1,16 +1,7 @@
-// setting users from users.json local db
-const usersDB = {
-	users: require("../data/users.json"),
-	setUsers: function (data) {
-		this.users = data;
-	},
-};
-
 // imports
-const fsPromises = require("fs").promises;
-const path = require("path");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const User = require("../models/users.model");
 
 // Register User Controller
 const registerUser = async (req, res, next) => {
@@ -27,7 +18,8 @@ const registerUser = async (req, res, next) => {
 		}
 
 		// check if the user is already present in the db or not
-		const userDuplicate = usersDB.users.find((usr) => usr.username === user);
+		const userDuplicate = await User.findOne({ username: user }).exec();
+		// We need to chain exec() if we are using findOne();
 
 		// if user is already present in the DB then no need to create the user with the same username
 		// status code 409 -> conflict
@@ -40,26 +32,16 @@ const registerUser = async (req, res, next) => {
 		// encrypt the password
 		const hashedPass = await bcrypt.hash(pass, 10);
 
-		// create and store the new user
-		const newUser = {
+		// create and store the new user in the DB
+		const result = await User.create({
 			username: user,
 			password: hashedPass,
-			roles: {
-				User: 2001,
-			},
-		};
-		usersDB.setUsers([...usersDB.users, newUser]);
-
-		// write to localDB users.json file
-		await fsPromises.writeFile(
-			path.join(__dirname, "..", "data", "users.json"),
-			JSON.stringify(usersDB.users)
-		);
+		});
 
 		// send response
 		res.status(201).json({
 			success: true,
-			data: newUser,
+			data: result,
 		});
 		//
 	} catch (error) {
