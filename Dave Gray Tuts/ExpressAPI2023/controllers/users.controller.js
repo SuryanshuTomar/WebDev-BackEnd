@@ -68,7 +68,7 @@ const loginUser = async (req, res, next) => {
 		}
 
 		// check if the user presents in the DB or not.
-		const userPresent = usersDB.users.find((usr) => usr.username === user);
+		const userPresent = await User.findOne({ username: user }).exec();
 
 		// if no user present then send the response.
 		if (!userPresent)
@@ -124,23 +124,10 @@ const loginUser = async (req, res, next) => {
 			{ expiresIn: "1d" }
 		);
 
-		// Separate the otherUsers from DB
-		const otherUsers = usersDB.users.filter(
-			(usr) => usr.username !== userPresent.username
-		);
-
 		// Store the new refreshToken with the user in the DB
 		// We are storing it in the DB with the user, so that when the user logs out before the refreshToken expires, we can invalidate the refreshToken so that no one can indefinitely keeps logged in without authorisation.
-		const currentUser = { ...userPresent, refreshToken };
-
-		// And now updated the currentUser in the DB.
-		usersDB.setUsers([...otherUsers, currentUser]);
-
-		// write the updated users to the db
-		await fsPromises.writeFile(
-			path.join(__dirname, "..", "data", "users.json"),
-			JSON.stringify(usersDB.users)
-		);
+		userPresent.refreshToken = refreshToken;
+		const currentUser = await userPresent.save();
 
 		// if everything is correct then send correct response
 		// Note: we also have to set the property "secure: true" also along with the httpOnly property in the cookie() method with the response and this "secure" property will allow us to send the cookie along with response only to the https server.
@@ -191,9 +178,7 @@ const logoutUser = async (req, res, next) => {
 		const refreshToken = cookies.reftoken;
 
 		// check if the user presents in the DB that matches the refreshToken that is sent to the server -> checking if the provided refreshToken is present with any of the users present in the DB or not.
-		const userPresent = usersDB.users.find(
-			(usr) => usr.refreshToken === refreshToken
-		);
+		const userPresent = await User.findOne({ refreshToken }).exec();
 
 		// if no user present then -> clear the cookie that is sent to us and then send the response.
 		if (!userPresent) {
@@ -213,22 +198,10 @@ const logoutUser = async (req, res, next) => {
 		}
 
 		// if the user is present in the DB -> Then we have to now delete the refreshToken from that user in the DB.
-		const otherUsers = usersDB.users.filter(
-			(user) => user.refreshToken !== userPresent.refreshToken
-		);
-		// removing the refreshToken from the user
-		const currentUser = { ...userPresent, refreshToken: "" };
+		userPresent.refreshToken = "";
+		// now the changes will be save to the MongoDb
+		const result = await userPresent.save();
 
-		// now updating the DB with
-		usersDB.setUsers([...otherUsers, currentUser]);
-
-		// now write the updated users data in the DB
-		await fsPromises.writeFile(
-			path.join(__dirname, "..", "data", "users.json"),
-			JSON.stringify(usersDB.users)
-		);
-
-		console.log(process.env.NODE_ENV);
 		// now clear the cookie and send the send response
 		// Note: we have to set the property "secure: true" also along with the httpOnly property and this "secure" property will allow us to send the cookie along with response only to the https server.
 		res.clearCookie("reftoken", {
@@ -272,9 +245,7 @@ const handleRefreshToken = async (req, res, next) => {
 		const refreshToken = cookies.reftoken;
 
 		// check if the user presents in the DB that matches the refreshToken that is sent to the server -> checking if the provided refreshToken is present with any of the users present in the DB or not.
-		const userPresent = usersDB.users.find(
-			(usr) => usr.refreshToken === refreshToken
-		);
+		const userPresent = await User.findOne({ refreshToken }).exec();
 
 		// if no user present then send the response.
 		if (!userPresent)
