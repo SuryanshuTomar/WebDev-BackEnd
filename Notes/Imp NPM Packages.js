@@ -39,3 +39,4 @@
 // 5. Redux Toolkit and Redux -> npm install @reduxjs/toolkit and npm install react-redux7
 // 6. Charts -> recharts and chartjs, Note: for React -> chartjs and react-chart-2 both needed
 // 7. React Toasts -> npm install react-hot-toast
+// 8. React Quill -> Rich text editor -> npm i react-quill --save
