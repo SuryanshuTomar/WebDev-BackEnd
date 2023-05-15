@@ -7,4 +7,5 @@ module.exports = errorHandler = (err, req, res, next) => {
 		success: false,
 		message: err.message,
 	});
+	console.log("Error Handler");
 };

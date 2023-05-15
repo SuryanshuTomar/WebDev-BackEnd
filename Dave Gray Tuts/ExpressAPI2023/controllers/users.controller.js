@@ -300,4 +300,68 @@ const handleRefreshToken = async (req, res, next) => {
 	}
 };
 
-module.exports = { registerUser, loginUser, logoutUser, handleRefreshToken };
+// Get All User Controller
+const getAllUsers = async (req, res, next) => {
+	console.log("Hitting");
+	try {
+		const users = await User.find();
+		if (!users)
+			return res
+				.status(204)
+				.json({ success: false, message: "No users found" });
+		res.json({ success: true, data: users });
+	} catch (error) {
+		next(error);
+	}
+};
+
+// Delete User Controller
+const deleteUser = async (req, res, next) => {
+	if (!req?.body?.id)
+		return res
+			.status(400)
+			.json({ success: false, message: "User ID required" });
+
+	try {
+		const user = await User.findOne({ _id: req.body.id }).exec();
+		if (!user) {
+			return res.status(204).json({
+				success: false,
+				message: `User ID ${req.body.id} not found`,
+			});
+		}
+		const result = await user.deleteOne({ _id: req.body.id });
+		res.json({ success: true, data: result });
+	} catch (error) {
+		next(error);
+	}
+};
+
+// Get User Controller
+const getUser = async (req, res, next) => {
+	if (!req?.params?.id)
+		return res
+			.status(400)
+			.json({ success: false, message: "User ID required" });
+	try {
+		const user = await User.findOne({ _id: req.params.id }).exec();
+		if (!user) {
+			return res
+				.status(204)
+				.json({ message: `User ID ${req.params.id} not found` });
+		}
+		res.json({ success: false, data: user });
+	} catch (error) {
+		next(error);
+	}
+};
+
+module.exports = {
+	registerUser,
+	loginUser,
+	logoutUser,
+	handleRefreshToken,
+	getAllUsers,
+	getUser,
+	deleteUser,
+};
