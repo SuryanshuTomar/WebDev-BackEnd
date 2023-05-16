@@ -54,24 +54,6 @@ app.get("/$|index(.html)?", (req, res) => {
 	res.render("index", { name: "Alex" });
 });
 
-// -------------------------------------------------------------------------------------
-// Router Handlers Chain
-const one = (req, res, next) => {
-	console.log("one");
-	next();
-};
-
-const two = (req, res, next) => {
-	console.log("two");
-	next();
-};
-
-const three = (req, res, next) => {
-	console.log("three");
-	res.send("Recieved Chain!");
-};
-
-app.get("/chain(.html)?", [one, two, three]);
 
 // -------------------------------------------------------------------------------------
 // API Route middlewares
