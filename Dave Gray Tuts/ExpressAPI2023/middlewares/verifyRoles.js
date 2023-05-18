@@ -21,12 +21,12 @@ const verifyRoles = (...allowedRoles) => {
 			.map((role) => rolesArr.includes(role))
 			.find((val) => val === true);
 
-			console.log("roles", result);
+			// console.log("roles", result);
 		// if no value in the result is present then return the response for unauthorized
 		if (!result)
 			return res.status(401).json({
 				success: false,
-				message: "Unauthroized",
+				message: "Unauthorized",
 			});
 
 
