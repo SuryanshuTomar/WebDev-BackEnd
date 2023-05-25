@@ -125,7 +125,7 @@ const loginUser = async (req, res, next) => {
 				username: userPresent.username,
 			},
 			process.env.REFRESH_TOKEN_SECRET,
-			{ expiresIn: "35s" }
+			{ expiresIn: "1d" }
 		);
 
 		// generating the array of valid refreshToken for the current user.
@@ -253,6 +253,7 @@ const handleRefreshToken = async (req, res, next) => {
 	try {
 		// get the cookies from the request object
 		const cookies = req.cookies;
+		console.log(req.cookies);
 
 		// if the cookie does not exists or the reftoken property in cookies does not exists then send the Unauthorized response
 		if (!cookies?.reftoken) {
@@ -280,7 +281,7 @@ const handleRefreshToken = async (req, res, next) => {
 		// So now if the user is not present and we have received the refreshToken, Then this mean that the current sitution is for reuse of refresh token because the provided token has already been deleted once it is used.
 		// Detected refresh token reuse!!
 		// So this mean, we now have to decode the provided refresh token and get the user it belongs to and then delete all the refresh tokens for that user.
-		if (!userPresent)
+		if (!userPresent) {
 			jwt.verify(
 				refreshToken,
 				process.env.REFRESH_TOKEN_SECRET,
@@ -293,6 +294,7 @@ const handleRefreshToken = async (req, res, next) => {
 						});
 					}
 
+					console.log("Attempted refresh token reuse!");
 					// otherwise, if we are able to decoded it, this means someone is trying to use refresh token which is already use once
 					const hackedUser = await User.findOne({
 						username: decoded.username,
@@ -303,13 +305,13 @@ const handleRefreshToken = async (req, res, next) => {
 					// save the user
 					const result = await hackedUser.save();
 					console.log(result);
-					return res.status(403).json({
-						success: false,
-						message: result,
-					});
 				}
 			);
-
+			return res.status(403).json({
+				success: false,
+				message: "Forbidden",
+			});
+		}
 		// - If the refreshToken provided is new then now, we have to invalidate the provided the refreshToken and generate a new refreshToken for the response.
 		// Now, filtering out the current refreshToken from the user refreshToken array.
 		const newRefreshTokenArray = userPresent.refreshToken.filter(
@@ -384,7 +386,7 @@ const handleRefreshToken = async (req, res, next) => {
 				});
 
 				// send the access token via response
-				res.status(200).json({
+				return res.status(200).json({
 					success: true,
 					accessToken,
 					roles,
