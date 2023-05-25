@@ -58,6 +58,7 @@ const loginUser = async (req, res, next) => {
 	try {
 		// check for existing cookies present in the request
 		const cookies = req.cookies;
+		console.log("cookie available at login: ", JSON.stringify(cookies));
 
 		// get user credentials
 		const { user, pass } = req.body;
@@ -124,7 +125,7 @@ const loginUser = async (req, res, next) => {
 				username: userPresent.username,
 			},
 			process.env.REFRESH_TOKEN_SECRET,
-			{ expiresIn: "1d" }
+			{ expiresIn: "35s" }
 		);
 
 		// generating the array of valid refreshToken for the current user.
@@ -135,7 +136,8 @@ const loginUser = async (req, res, next) => {
 			: userPresent.refreshToken.filter((rt) => rt !== cookies.reftoken);
 
 		// now remove the previous refreshToken from the cookie if its present
-		if (cookie?.reftoken) {
+		// it will be present when the refreshToken get expired and user didn't logout manually.
+		if (cookies?.reftoken) {
 			res.clearCookie("reftoken", {
 				httpOnly: true,
 				sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
@@ -321,8 +323,10 @@ const handleRefreshToken = async (req, res, next) => {
 			async (err, decoded) => {
 				// This error will occur when the provided refreshToken has been expired
 				if (err) {
+					console.log("Expired Refresh Token ");
 					userPresent.refreshToken = [...newRefreshTokenArray];
 					const result = await userPresent.save();
+					console.log(result);
 				}
 
 				// if the refresh token is incorrect or tampered with or if the username we found for the userPresent is not the same as the username from the decoded refreshToken then send the Forbidden response
@@ -335,7 +339,8 @@ const handleRefreshToken = async (req, res, next) => {
 
 				// otherwise it mean the provided refresh token is still valid
 				// Again get the user roles for the access token payload private claim
-				const roles = Object.values(userPresent.roles);
+				let roles = Object.values(userPresent.roles);
+				roles = roles.filter((role) => role);
 
 				// if the valid refreshToken is provided then create a new access token
 				const accessToken = jwt.sign(
