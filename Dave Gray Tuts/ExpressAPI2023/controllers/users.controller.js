@@ -56,8 +56,11 @@ const registerUser = async (req, res, next) => {
 // Login User Controller
 const loginUser = async (req, res, next) => {
 	try {
-		const { user, pass } = req.body;
+		// check for existing cookies present in the request
+		const cookies = req.cookies;
 
+		// get user credentials
+		const { user, pass } = req.body;
 		if (!user || !pass) {
 			// check if both fields are present
 			// status code 400 -> bad request
@@ -115,7 +118,7 @@ const loginUser = async (req, res, next) => {
 		);
 
 		// Create Refresh Token using JWT
-		const refreshToken = jwt.sign(
+		const newRefreshToken = jwt.sign(
 			{
 				// no need to attach the roles here as this refresh token is created to refresh accessToken which will be used to access authorized resources
 				username: userPresent.username,
@@ -124,15 +127,31 @@ const loginUser = async (req, res, next) => {
 			{ expiresIn: "1d" }
 		);
 
+		// generating the array of valid refreshToken for the current user.
+		// if cookies are not present then just store the refreshToken as it is
+		// else remove the refreshToken present in the cookies from the current user
+		const newRefreshTokenArray = !cookies?.reftoken
+			? userPresent.refreshToken
+			: userPresent.refreshToken.filter((rt) => rt !== cookies.reftoken);
+
+		// now remove the previous refreshToken from the cookie if its present
+		if (cookie?.reftoken) {
+			res.clearCookie("reftoken", {
+				httpOnly: true,
+				sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
+				secure: process.env.NODE_ENV === "Development" ? false : true,
+			});
+		}
+
 		// Store the new refreshToken with the user in the DB
 		// We are storing it in the DB with the user, so that when the user logs out before the refreshToken expires, we can invalidate the refreshToken so that no one can indefinitely keeps logged in without authorisation.
-		userPresent.refreshToken = refreshToken;
+		userPresent.refreshToken = [...newRefreshTokenArray, newRefreshToken];
 		const currentUser = await userPresent.save();
 
 		// if everything is correct then send correct response
 		// Note: we also have to set the property "secure: true" also along with the httpOnly property in the cookie() method with the response and this "secure" property will allow us to send the cookie along with response only to the https server.
 		res.status(200)
-			.cookie("reftoken", refreshToken, {
+			.cookie("reftoken", newRefreshToken, {
 				httpOnly: true,
 				sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
 				secure: process.env.NODE_ENV === "Development" ? false : true,
@@ -197,8 +216,10 @@ const logoutUser = async (req, res, next) => {
 			});
 		}
 
-		// if the user is present in the DB -> Then we have to now delete the refreshToken from that user in the DB.
-		userPresent.refreshToken = "";
+		// if the user is present in the DB -> Then we have to now delete this particular refreshToken from that user in the DB.
+		userPresent.refreshToken = userPresent.refreshToken.filter(
+			(rt) => rt !== refreshToken
+		);
 		// now the changes will be save to the MongoDb
 		const result = await userPresent.save();
 
@@ -244,21 +265,66 @@ const handleRefreshToken = async (req, res, next) => {
 		// if the refToken is present in the cookie then
 		const refreshToken = cookies.reftoken;
 
+		// delete the previous cookie for previous refresh token as we are implementing the refresh token rotation mechanics here -
+		res.clearCookie("reftoken", {
+			httpOnly: true,
+			sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
+			secure: process.env.NODE_ENV === "Development" ? false : true,
+		});
+
 		// check if the user presents in the DB that matches the refreshToken that is sent to the server -> checking if the provided refreshToken is present with any of the users present in the DB or not.
 		const userPresent = await User.findOne({ refreshToken }).exec();
 
-		// if no user present then send the response.
+		// So now if the user is not present and we have received the refreshToken, Then this mean that the current sitution is for reuse of refresh token because the provided token has already been deleted once it is used.
+		// Detected refresh token reuse!!
+		// So this mean, we now have to decode the provided refresh token and get the user it belongs to and then delete all the refresh tokens for that user.
 		if (!userPresent)
-			return res.status(403).json({
-				success: false,
-				message: "Forbidden!",
-			});
+			jwt.verify(
+				refreshToken,
+				process.env.REFRESH_TOKEN_SECRET,
+				async (err, decoded) => {
+					// if err is received, that means we cannot decode the refresh token because it is no longer valid/expired.
+					if (err) {
+						return res.status(403).json({
+							success: false,
+							message: "Forbidden!",
+						});
+					}
+
+					// otherwise, if we are able to decoded it, this means someone is trying to use refresh token which is already use once
+					const hackedUser = await User.findOne({
+						username: decoded.username,
+					}).exec();
+					// remove all the refreshToken for the user.
+					hackedUser.refreshToken = [];
+
+					// save the user
+					const result = await hackedUser.save();
+					console.log(result);
+					return res.status(403).json({
+						success: false,
+						message: result,
+					});
+				}
+			);
+
+		// - If the refreshToken provided is new then now, we have to invalidate the provided the refreshToken and generate a new refreshToken for the response.
+		// Now, filtering out the current refreshToken from the user refreshToken array.
+		const newRefreshTokenArray = userPresent.refreshToken.filter(
+			(rt) => rt !== refreshToken
+		);
 
 		// now verify the refreshToken sent to us by the client
 		jwt.verify(
 			refreshToken,
 			process.env.REFRESH_TOKEN_SECRET,
-			(err, decoded) => {
+			async (err, decoded) => {
+				// This error will occur when the provided refreshToken has been expired
+				if (err) {
+					userPresent.refreshToken = [...newRefreshTokenArray];
+					const result = await userPresent.save();
+				}
+
 				// if the refresh token is incorrect or tampered with or if the username we found for the userPresent is not the same as the username from the decoded refreshToken then send the Forbidden response
 				if (err || userPresent.username !== decoded.username) {
 					return res.status(403).json({
@@ -267,6 +333,7 @@ const handleRefreshToken = async (req, res, next) => {
 					});
 				}
 
+				// otherwise it mean the provided refresh token is still valid
 				// Again get the user roles for the access token payload private claim
 				const roles = Object.values(userPresent.roles);
 
@@ -282,15 +349,43 @@ const handleRefreshToken = async (req, res, next) => {
 					{ expiresIn: "30s" }
 				);
 
+				// Now create a new
+
+				// generate a new refresh token
+				const newRefreshToken = jwt.sign(
+					{
+						// no need to attach the roles here as this refresh token is created to refresh accessToken which will be used to access authorized resources
+						username: userPresent.username,
+					},
+					process.env.REFRESH_TOKEN_SECRET,
+					{ expiresIn: "1d" }
+				);
+
+				// Store the new refreshToken with the user in the DB
+				// We are storing it in the DB with the user, so that when the user logs out before the refreshToken expires, we can invalidate the refreshToken so that no one can indefinitely keeps logged in without authorisation.
+				userPresent.refreshToken = [
+					...newRefreshTokenArray,
+					newRefreshToken,
+				];
+				await userPresent.save();
+
+				// again sending the newly generated refreshToken for the refreshToken rotation
+				res.cookie("reftoken", newRefreshToken, {
+					httpOnly: true,
+					sameSite:
+						process.env.NODE_ENV === "Development" ? "lax" : "none",
+					secure: process.env.NODE_ENV === "Development" ? false : true,
+					maxAge: 24 * 60 * 60 * 1000,
+				});
+
 				// send the access token via response
 				res.status(200).json({
 					success: true,
 					accessToken,
+					roles,
 				});
 			}
 		);
-
-		//
 	} catch (error) {
 		console.log(error.mesage);
 		res.status(500).json({
