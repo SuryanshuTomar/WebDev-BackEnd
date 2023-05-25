@@ -131,13 +131,29 @@ const loginUser = async (req, res, next) => {
 		// generating the array of valid refreshToken for the current user.
 		// if cookies are not present then just store the refreshToken as it is
 		// else remove the refreshToken present in the cookies from the current user
-		const newRefreshTokenArray = !cookies?.reftoken
+		let newRefreshTokenArray = !cookies?.reftoken
 			? userPresent.refreshToken
 			: userPresent.refreshToken.filter((rt) => rt !== cookies.reftoken);
 
 		// now remove the previous refreshToken from the cookie if its present
 		// it will be present when the refreshToken get expired and user didn't logout manually.
 		if (cookies?.reftoken) {
+			/*
+				For Scenerio - 
+					1. User logs in but uses RT and does not logout
+					2. RT is stolen
+					3. If 1 and 2 are true, then when user tries to use refresh token that is already present in the user refreshToken array, it will show that the refresh token is being reuse as it was stolen and it wouldn't be present in the refreshToken array. So, we have to empty the use refreshToken array.
+			*/
+
+			const refreshToken = cookies.reftoken;
+			const foundToken = await User.findOne({ refreshToken }).exec();
+
+			// Detected Refresh Token Reuse
+			if (!foundToken) {
+				console.log("Attempted Refresh Token reuse at login!!");
+				newRefreshTokenArray = [];
+			}
+
 			res.clearCookie("reftoken", {
 				httpOnly: true,
 				sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
