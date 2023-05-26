@@ -7,12 +7,13 @@
 
 // Creating the Model and Configure DB in schema.prisma file
 
+// To create a new table in Prisma we need to first migrate the DB
+// - npx prisma generate
+// - npx prisma migrate dev --name init --create-only
+// - npx prisma migrate deploy
+
 // After creating the Model and Setting up the DB, we can see the prisma GUI using
 // - npx prisma studio
-
-// To create a new table in Prisma we need to first migrate the DB
-// - npx prisma migrate dev
-// and then provide the info
 
 // To Generate model definition again after modifying the model -
 // - npx prisma generate
