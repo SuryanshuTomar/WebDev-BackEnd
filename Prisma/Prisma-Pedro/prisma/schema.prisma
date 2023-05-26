@@ -1,0 +1,20 @@
+// Prisma client generator using the @prisma/client package
+generator client {
+   provider = "prisma-client-js"
+}
+
+// Database connection information
+datasource db {
+   provider = "mysql"
+   url      = env("DATABASE_URL")
+}
+
+// Creating a table in the DB using Prisma
+model Users {
+   id        Int      @id @default(autoincrement())
+   firstName String
+   lastName  String
+   age       Int
+   createdAt DateTime @default(now())
+   updatedAt DateTime @updatedAt
+}
