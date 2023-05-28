@@ -87,6 +87,34 @@ app.get("/house/:id", async (req, res) => {
 	res.status(200).json(houseRelation);
 });
 
+app.get("/house/filters", async (req, res) => {
+	const houseRelation = await prisma.house.findMany({
+		where: {
+			wifiPassword: {
+				not: null,
+			},
+			owner: {
+				age: {
+					gte: 22,
+				},
+			},
+		},
+
+		orderBy: [
+			{
+				owner: {
+					firstName: "desc",
+				},
+			},
+		],
+		include: {
+			owner: true,
+			builtBy: false,
+		},
+	});
+	res.status(200).json(houseRelation);
+});
+
 // start server
 app.listen(8000, "localhost", () => {
 	console.log("Server listening on PORT: ", 8000);
