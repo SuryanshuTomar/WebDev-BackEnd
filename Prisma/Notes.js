@@ -18,3 +18,50 @@
 // To Generate model definition again after modifying the model -
 // - npx prisma generate
 // - npx prisma migrate dev
+
+// ---------------------------------------------------------------------------------------
+// - Prisma Schema Example -
+
+// Prisma client generator using the @prisma/client package
+// generator client {
+//    provider = "prisma-client-js"
+// }
+
+// Database connection information
+// datasource db {
+//    provider = "mysql"
+//    url      = env("DATABASE_URL")
+// }
+
+// Creating a table in the DB using Prisma
+// model User {
+//    id         Int      @id @default(autoincrement())
+//    id         String   @id @default(uuid())
+//    firstName  String
+//    lastName   String
+//    age        Int
+//    createdAt  DateTime @default(now())
+//    updatedAt  DateTime @updatedAt
+//    houseOwned House[]  @relation("HouseOwner")
+//    houseBuilt House[]  @relation("HouseBuilder")
+// }
+
+// model House {
+//    id           String  @id @default(uuid())
+//    address      String  @unique
+//    wifiPassword String? // optional column property
+
+//    owner   User  @relation("HouseOwner", fields: [ownerId], references: [id])
+//    ownerId String
+
+//    builtBy   User  @relation("HouseBuilder", fields: [builtById], references: [id])
+//    builtById String
+
+//    createdAt DateTime @default(now())
+//    updatedAt DateTime @updatedAt
+// }
+
+// -----------------------------------------------------------------------------------
+// Two Ways of creating id in Prisma -
+//    id         Int      @id @default(autoincrement())
+//    id         String   @id @default(uuid())
