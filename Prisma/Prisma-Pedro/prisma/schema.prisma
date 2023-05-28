@@ -10,11 +10,29 @@ datasource db {
 }
 
 // Creating a table in the DB using Prisma
-model Users {
-   id        Int      @id @default(autoincrement())
-   firstName String
-   lastName  String
-   age       Int
+model User {
+   // id         Int      @id @default(autoincrement())
+   id         String   @id @default(uuid())
+   firstName  String
+   lastName   String
+   age        Int
+   createdAt  DateTime @default(now())
+   updatedAt  DateTime @updatedAt
+   houseOwned House[]  @relation("HouseOwner")
+   houseBuilt House[]  @relation("HouseBuilder")
+}
+
+model House {
+   id           String  @id @default(uuid())
+   address      String  @unique
+   wifiPassword String? // optional column property
+
+   owner   User  @relation("HouseOwner", fields: [ownerId], references: [id])
+   ownerId String
+
+   builtBy   User  @relation("HouseBuilder", fields: [builtById], references: [id])
+   builtById String
+
    createdAt DateTime @default(now())
    updatedAt DateTime @updatedAt
 }
